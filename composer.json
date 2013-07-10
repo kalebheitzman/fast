@@ -1,5 +1,5 @@
 {
-	"name": "jkheitzman/fastphp",
+	"name": "fastphp/fastphp",
 	"type": "library",
 	"description": "PHP 5.3+ Router Micro Framework",
 	"keywords": ["router", "framework"],
