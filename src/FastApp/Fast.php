@@ -184,10 +184,10 @@ class Fast {
 	{
 		// the pattern to test against
 		$pattern = array_shift($args);
-	    // the filterrs
-	    $filter = array_pop($args);
 		// the callable
-	    $callback = array_pop($args);
+	    $callback = array_shift($args);
+	    // the filterrs
+	    $filter = array_shift($args);
 	    // add the route to the routes var
 	    self::$routes[$method][$pattern] = array(
 	    	"method" => $method, 
