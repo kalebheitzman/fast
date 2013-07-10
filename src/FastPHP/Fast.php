@@ -1,6 +1,6 @@
 <?php
 /**
- * Fast - A PHP 5.3+ Router Micro Framework
+ * Fast - A PHP5 View-Model Micro Framework
  *
  * @author 		Kaleb Heitzman <jkheitzman@gmail.com>
  * @copyright 	2013 Kaleb Heitzman
@@ -31,110 +31,28 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace FastPHP;
+namespace FastApp;
 
 /**
- * Fast
+ * FastApp
  *
- * The Fast class handles various routing options. It will handle all 4 http
- * verb requests, GET, POST, PUT, DELETE.
- *
- * The Fast class also handles before and after filters using FAST::before()
- * and FAST::after()
+ * FastApp is a View-Model Framework with a RESTful HTTP router.
  * 
  * @package Fast
- * @author  Kaleb Hheitzman <kaleblex@gmail.com>
+ * @author  Kaleb Heitzman <jkheitzman@gmail.com>
  * @since  0.1.0
  */
 class Fast {
 
-	/**
-	 * @const string The version of Fast 
-	 */
-	const VERSION = '0.1.0';
+	static protected $viewEngine;
 
-	/**
-	 * @var array Configuration
-	 */
-	static protected $config;
+	static protected $modelEngine;
 
-	/**
-	 * @var array Processed routes
-	 */
 	static protected $routes;
 
-	/**
-	 * @var array Processed filters
-	 */
-	static protected $filters;
+	static protected $route;
 
-	/**
-	 * @var array HTTP Request
-	 */
-	static protected $request;
-
-	/**
-	 * @var array HTTP Response
-	 */
-	static protected $response;
-
-	/**
-	 * @var array Benchmarking
-	 */
-	static protected $benchmark;
-
-	/**
-	 * Constructor
-	 */
-	private function __construct()
-	{
-
-	}
-
-	/**
-	 * Initialize Fast
-	 *
-	 * Intialization sets up routes and filters arrays that an 
-	 * end user can add routes to by using syntax like 
-	 * Fast::get('entry/:id', 'filter', function($id) {});
-	 * @since 0.1.0
-	 */
-	static public function init($config = array())
-	{
-		// Benchmarking
-		self::$benchmark = array();
-		self::$benchmark['start'] = microtime(true);
-
-		// declare some default settings true of every app
-		$defaultSettings = array(
-			'server_path' => dirname(dirname(__FILE__)),
-			'base_path' => $_SERVER['REQUEST_URI'],
-			'environment' => 'production',
-			'default_layout' => 'default',
-
-			// parsers
-			'html_parser' => false,
-			'css_parser' => false,
-			'js_parser' => false,
-
-			// locations
-			'styles' => 'styles',
-			'scripts' => 'scripts',
-			'images' => 'images',
-
-			// other
-			'benchmark' => false,
-		);
-
-		// Configuration
-		self::$config = array_merge($defaultSettings, $config);
-
-		var_dump(self::$config);
-		// build the route map
-		self::$routes = array();
-		// build the filter map
-		self::$filters = array();
-	}
+	static protected $middleware;
 
 	/**
 	 * GET Request
@@ -142,7 +60,7 @@ class Fast {
 	static public function get()
 	{
 		$args = func_get_args();
-		return self::mapRoute($args, "GET");
+		self::mapRoute($args, "GET");
 	}
 	
 	/**
@@ -151,7 +69,7 @@ class Fast {
 	static public function post()
 	{
 		$args = func_get_args();
-		return self::mapRoute($args, "POST");
+		self::mapRoute($args, "POST");
 	}
 	
 	/**
@@ -160,7 +78,7 @@ class Fast {
 	static public function put()
 	{
 		$args = func_get_args();
-		return self::mapRoute($args, "PUT");
+		self::mapRoute($args, "PUT");
 	}
 	
 	/**
@@ -169,7 +87,7 @@ class Fast {
 	static public function delete()
 	{
 		$args = func_get_args();
-		return self::mapRoute($args, "DELETE");
+		self::mapRoute($args, "DELETE");
 	}
 
 	/**
@@ -178,62 +96,132 @@ class Fast {
 	static public function options()
 	{
 		$args = func_get_args();
-		return self::mapRoute($args, "OPTIONS");
+		self::mapRoute($args, "OPTIONS");
 	}
 
 	/**
-	 * BEFORE Filter
+	 *	Initialize the ViewEngine in Fast
 	 */
-	static public function before()
+	static public function viewEngine($engine = null)
 	{
-		$args = func_get_args();
-		return self::mapFilter($args, "before");
+		if (is_null($engine)) 
+			die('Woah! I need some eyeware. Define a view engine through Fast::viewEngine($engine).');
 	}
 
 	/**
-	 * AFTER Filter
+	 *	Initialize the ModelEngine in Fast
 	 */
-	static public function after()
+	static public function modelEngine($engine = null)
 	{
-		$args = func_get_args();
-		return self::mapFilter($args, "after");
+		if (is_null($engine)) 
+			die('Woah! I need some footware. Define a model engine through Fast::modelEngine($engine).');
 	}
 
 	/**
-	 * Fast Router
+	 *	Render a template using the viewEngine
+	 */
+	static public function render($view, $data = null)
+	{
+		echo "Things are working :)";
+		//return self::$viewEngine->render($view, $data);
+	}
+
+	/**
+	 *	The Database 
+	 */
+	static public function db()
+	{
+		return self::$modelEngine;
+	}
+
+	/**
+	 *	Go Run Fast!
 	 *
-	 * Determines correct route to use. If none are found it returns 404.
+	 *	Finds a route to display and runs view and model logic based on the
+	 *	route pattern. The view engine and model engine must be declared for
+	 *	run() to work.
 	 */
-	static private function router($url = null, $method = null)
+	static public function run()
 	{
-		/**
-		 * Setup the URL
-		 */
-		$url = array(
-			'original' => $url,
-			'path' => explode('/', parse_url($url, PHP_URL_PATH))
-		);
+		// Find a matching route or buzz out.
+		self::findRoute();
+		// execute any before filters
+		self::runMiddleware('before');
+		// execute the closure
+		self::runRoute();
+		// execute after filters
+		self::runMiddleware('after');
+	}
+
+	static private function runMiddleware($position = null)
+	{
+		if (is_null($position)) return false;
+		foreach(self::$route['filters'] as $filter) {
+			if (array_key_exists($filter, self::$middleware[$position])) {
+				$callback = self::$middleware[$position][$filter];
+				call_user_func($callback);
+			}
+		}
+	}
+
+	static private function runRoute()
+	{
+		call_user_func_array(self::$route['cb'], self::$route['params']);
+	}
+
+	/**
+	 *	Middleware
+	 */
+	static public function middleware($name, $cb, $position)
+	{
+		self::$middleware[$position][$name] = $cb;
+	}
+
+	/**
+	 * Map route
+	 */
+	static private function mapRoute($args = array(), $method = null)
+	{
+		// the pattern to test against
+		$pattern = array_shift($args);
+	    // the filterrs
+	    $filter = array_pop($args);
+		// the callable
+	    $callback = array_pop($args);
+	    // add the route to the routes var
+	    self::$routes[$method][$pattern] = array(
+	    	"method" => $method, 
+	    	"callback" => $callback, 
+	    	"filters" => $filter
+	    );
+	}
+
+	/**
+	 *	Find a Route
+	 */
+	static private function findRoute($url = array())
+	{
+		// Get the route called
+		$pattern = isset($_SERVER['PATH_INFO']) ? ltrim($_SERVER['PATH_INFO'], "/") : "/";
+		// Get the method
+		$method = $_SERVER['REQUEST_METHOD'];
+		// Setup the URL
+		$url['original'] = $pattern;
+		$url['path'] = explode('/', parse_url($pattern, PHP_URL_PATH));
 		$url['length'] = count($url['path']);
-
-		/**
-		 * Setup the patterns
-		 */
+		// Parse the patterns
 		foreach (self::$routes[$method] as $pattern => $data) {
-
 			$parameters = array();
-
 			// get pattern info
 			$pattern = array (
 				'original' => $pattern,
 				'path' => explode('/', $pattern)
 			);
 			$pattern['length'] = count($pattern['path']);
-
 			// this pattern is irrelevant 
 			if ($url['length'] <> $pattern['length']) {
 				continue;
 			}
-
 			// pattern matching
 			foreach($pattern['path'] as $i => $key) 
 			{
@@ -247,7 +235,6 @@ class Fast {
 					continue 2;
 				}
 			}
-
 			// check for parameters key		
 			if ( ! array_key_exists('parameters', $data))
 			{
@@ -255,137 +242,14 @@ class Fast {
 			}
 			// add the parameters
 			$data['parameters'] = array_merge($data['parameters'], $parameters);
+			self::$route['filters'] = $data['filters'];
+			self::$route['cb'] = $data['callback'];
+			self::$route['params'] = $data['parameters']; 
 			// return the data
-			return $data;
+			return true;
 		}
 		// no matches were found
-		return false;
+		return self::error404();
 	}
 
-	/**
-	 * Check for an existing filter
-	 */
-	static private function filter($name = null) {
-		if (array_key_exists($name, self::$filters)) {
-			return self::$filters[$name];
-		}
-		return false;
-	}
-
-	/**
-	 * Map route
-	 */
-	static private function mapRoute($args = array(), $method = null)
-	{
-		// the pattern to test against
-		$pattern = array_shift($args);
-		// the callable afterwards
-    $callback = array_pop($args);
-    // filter
-    $filter = array_shift($args);
-    // add the route to the routes var
-    self::$routes[$method][$pattern] = array(
-    	"method" => $method, 
-    	"callback" => $callback, 
-    	"filter" => $filter
-    );
-	}
-
-	/**
-	 * Map filter
-	 */
-	static private function mapFilter($args = array(), $position = null) {
-		// get the name
-		$filter = array_shift($args);
-		// get the callable afterwards
-		$callback = array_pop($args);
-		// register the filter
-		self::$filters[$filter] = array(
-			'callback' => $callback,
-			'position' => $position
-		);
-	}
-
-	/**
-	 * Run Fast
-	 *
-	 * This will find the route called and apply pattern and filter matching. If
-	 * a valid route is found, we'll hand off the request to the associated
-	 * callable with the correct HTTP Headers and info.
-	 */
-	static public function run()
-	{
-		// Get the route called
-		$pattern = isset($_SERVER['PATH_INFO']) ? ltrim($_SERVER['PATH_INFO'], "/") : "/";
-		// Get the method
-		$method = $_SERVER['REQUEST_METHOD'];
-		// Get the route and its data
-		$route = self::router($pattern, $method);
-		// check for a 404
-		if ($route == false) {
-			// trigger a 404 error
-
-		}
-
-		// Set the default filter
-		$filter = null;
-		
-		// check for filters
-		if ( ! is_null($route['filter'])) {
-			$filter = self::filter($route['filter']);
-		}
-		
-		// Before filter
-		if ($filter['position'] == "before") {
-			call_user_func($filter['callback']);
-		}
-
-		// The route callback
-		call_user_func_array($route['callback'], $route['parameters']);
-		
-		// After filter
-		if ($filter['position'] == "after") {
-			call_user_func($filter['callback']);
-		}
-
-		// check for active benchmarking
-		if (self::$config['benchmark']) {
-				$execution = microtime(true)-self::$benchmark['start'];
-				$execution = substr($execution, 0, 7);
-				echo "<p><code> Script executed in " . $execution . " seconds</code></p>";
-		}
-	}
-
-	/**
-	 * Fast Renderer
-	 *
-	 * Renders basic php views
-	 */
-	static public function render($view = null, $data = array())
-	{
-		// get the viewFile
-		$viewFile = self::$config['server_path'] . '/views/' . $view . '.php';
-		// get the template
-		$template = self::$config['server_path'] . '/views/templates/' . self::$config['default_layout'] . '.php'; 
-
-		// check for the view
-		if (is_null($view) || ! file_exists($viewFile)) {
-			die($view . ' view not found.');
-		}
-
-		// get the content var
-		$content = file_get_contents($viewFile);
-		// check for content
-		if ( ! $content) {
-			die('Something went wrong.');
-		}
-
-		ob_start();
-			require_once($template);
-			$rendered = ob_get_contents();
-		ob_end_clean();
-
-		echo $rendered;
-	}
-
-}
+} /* EOF Fast.php */

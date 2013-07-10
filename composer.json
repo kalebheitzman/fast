@@ -1,7 +1,7 @@
 {
 	"name": "fastphp/fast",
 	"type": "library",
-	"description": "PHP 5.3+ Router Micro Framework",
+	"description": "PHP View-Model Micro Framework",
 	"keywords": ["router", "framework", "fast"],
 	"homepage": "https://github.com/kalebheitzman/fastphp",
 	"license": "MIT",

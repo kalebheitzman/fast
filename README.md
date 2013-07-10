@@ -1,6 +1,6 @@
-# PHP 5.3+ Router Micro Framework
+# PHP 5.3 View Model Micro Framework
 
-Fast is a 5.3+ Router and Micro Framework for building light-weight web applications. Use the Fast::get(), Fast::post(), etc methods to build your app and use your own templating, db, minimizing libraries of choice. We get you to the party and then it's your job to shine.
+Fast is a PHP 5.3+ View Model Micro Framework for building light-weight web applications. Use the Fast::get(), Fast::post(), etc methods to build your app and use your own templating, db, minimizing libraries of choice. We get you to the party and then it's your job to shine.
 
 ## Installation
 
