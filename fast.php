@@ -5,9 +5,9 @@
  * @author 		Kaleb Heitzman <jkheitzman@gmail.com>
  * @copyright 	2013 Kaleb Heitzman
  * @link 		https://github.com/kalebheitzman/fastphp
- * @license 	http://kheitzman.com/fast/license
+ * @license 	https://github.com/kalebheitzman/fastphp/blob/master/LICENSE
  * @version 	0.1.0
- * @package  	Fast
+ * @package  	FastPHP
  *
  * MIT License
  * 

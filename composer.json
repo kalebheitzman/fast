@@ -1,0 +1,19 @@
+{
+	"name": "jkheitzman/fastphp",
+	"type": "library",
+	"description": "PHP 5.3+ Router Micro Framework",
+	"keywords": ["router", "framework"],
+	"homepage": "https://github.com/kalebheitzman/fastphp",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Kaleb Heitzman",
+			"email": "jkheitzman@gmail.com",
+			"homepage": "https://github.com/kalebheitzman",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.3.0"
+	}
+}
