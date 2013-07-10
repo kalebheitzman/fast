@@ -1,10 +1,10 @@
 <?php
 /**
- * Fast - a micro PHP 5 DSL
+ * Fast - A PHP 5.3+ Router Micro Framework
  *
- * @author 		Kaleb Heitzman <kaleblex@gmail.com>
+ * @author 		Kaleb Heitzman <jkheitzman@gmail.com>
  * @copyright 	2013 Kaleb Heitzman
- * @link 		http://kheitzman.com/fast
+ * @link 		https://github.com/kalebheitzman/fastphp
  * @license 	http://kheitzman.com/fast/license
  * @version 	0.1.0
  * @package  	Fast
