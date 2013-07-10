@@ -23,52 +23,52 @@ This will use composers autoload feature and alias Fast as Fast for easier use.
 
 ## Examples
 
-Fast::get('/', function() {
-	Fast::render('index');
-});
-
-Fast::get('entries', function() {
-	echo "All Entries";
-});
-
-foreach (range(0, 500) as $number) {
-	Fast::get('entry' . $number . '/:id', function($id) {
-		echo $id;
+	Fast::get('/', function() {
+		Fast::render('index');
 	});
-};
 
-Fast::get('entry/:id', function($id) {
-	echo "Entry with id " . $id;
-});
+	Fast::get('entries', function() {
+		echo "All Entries";
+	});
 
-Fast::post('entry', function() {
-	echo "Inserting a new entry";
-});
+	foreach (range(0, 500) as $number) {
+		Fast::get('entry' . $number . '/:id', function($id) {
+			echo $id;
+		});
+	};
 
-Fast::put('entry/:id', function($id) {
-	echo "Updating an existing entry";
-});
+	Fast::get('entry/:id', function($id) {
+		echo "Entry with id " . $id;
+	});
 
-Fast::delete('entry/:id', function($id) {
-	echo "Deleting an entry";
-});
+	Fast::post('entry', function() {
+		echo "Inserting a new entry";
+	});
 
-Fast::options('entries', function() {
-	echo "Getting the HTTP OPTIONS VERB about entries";
-});
+	Fast::put('entry/:id', function($id) {
+		echo "Updating an existing entry";
+	});
 
-Fast::get('article', 'authenticate', function() {
-	echo "Authenticate before seeing articles";
-});
+	Fast::delete('entry/:id', function($id) {
+		echo "Deleting an entry";
+	});
 
-Fast::get('feed', 'listen', function() {
-	echo "Registering a listening agent";
-});
+	Fast::options('entries', function() {
+		echo "Getting the HTTP OPTIONS VERB about entries";
+	});
 
-Fast::before('authenticate', function() {
-	echo "Authenticating";
-});
+	Fast::get('article', 'authenticate', function() {
+		echo "Authenticate before seeing articles";
+	});
 
-Fast::after('listen', function() {
-	echo "listen";
-});
+	Fast::get('feed', 'listen', function() {
+		echo "Registering a listening agent";
+	});
+
+	Fast::before('authenticate', function() {
+		echo "Authenticating";
+	});
+
+	Fast::after('listen', function() {
+		echo "listen";
+	});
