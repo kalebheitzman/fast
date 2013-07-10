@@ -1,5 +1,5 @@
 {
-	"name": "fastapp/fast",
+	"name": "fastapp/fastapp",
 	"type": "library",
 	"description": "PHP View-Model Micro Framework",
 	"keywords": ["router", "framework", "fast"],
