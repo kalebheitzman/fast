@@ -44,14 +44,44 @@ namespace FastApp;
  */
 class Fast {
 
+	/**
+	 * @const string The version of Fast 
+	 */
+	const VERSION = '0.1.0';
+
+	/**
+	 * @var array Benchmarking
+	 */
+	static protected $benchmark;
+
+	/**
+	 * @var array Configuration
+	 */
+	static protected $config;
+
+	/**
+	 * @var mixed View Templating System
+	 */
 	static protected $viewEngine;
 
+	/**
+	 * @var mixed Database and Model System
+	 */
 	static protected $modelEngine;
 
+	/**
+	 * @var array Processed routes
+	 */
 	static protected $routes;
 
+	/**
+	 * @var array Current processed route
+	 */	
 	static protected $route;
 
+	/**
+	 * @var array Middleware
+	 */	
 	static protected $middleware;
 
 	/**
@@ -100,12 +130,48 @@ class Fast {
 	}
 
 	/**
+	 *	Prepare Fast
+	 */
+	static public function prepare($config = array())
+	{
+		// Benchmarking
+		self::$benchmark = array();
+		self::$benchmark['start'] = microtime(true);
+
+		// declare some default settings true of every app
+		$defaultSettings = array(
+			'server_path' => dirname(dirname(__FILE__)),
+			'base_path' => $_SERVER['REQUEST_URI'],
+			'environment' => 'production',
+			'default_layout' => 'default',
+
+			// parsers
+			'html_parser' => false,
+			'css_parser' => false,
+			'js_parser' => false,
+
+			// locations
+			'styles' => 'styles',
+			'scripts' => 'scripts',
+			'images' => 'images',
+
+			// other
+			'benchmark' => false,
+		);
+
+		// Configuration
+		self::$config = array_merge($defaultSettings, $config);
+	}
+
+	/**
 	 *	Initialize the ViewEngine in Fast
 	 */
 	static public function viewEngine($engine = null)
 	{
 		if (is_null($engine)) 
 			die('Woah! I need some eyeware. Define a view engine through Fast::viewEngine($engine).');
+		else
+			self::$viewEngine = $engine;
 	}
 
 	/**
@@ -115,6 +181,8 @@ class Fast {
 	{
 		if (is_null($engine)) 
 			die('Woah! I need some footware. Define a model engine through Fast::modelEngine($engine).');
+		else
+			self::$modelEngine = $engine;
 	}
 
 	/**
@@ -122,8 +190,16 @@ class Fast {
 	 */
 	static public function render($view, $data = null)
 	{
-		echo "Things are working :)";
-		//return self::$viewEngine->render($view, $data);
+		$viewInfo = pathinfo($view);
+		if ( ! array_key_exists('extension', $viewInfo)) {
+			$view = $view . ".html";
+		}
+		if (method_exists(self::$viewEngine, 'render')) {
+			echo self::$viewEngine->render($view, $data);
+		}
+		else {
+			die('ViewEngine fail. Does your ViewEngine have a render method?');
+		}
 	}
 
 	/**
@@ -151,6 +227,13 @@ class Fast {
 		self::runRoute();
 		// execute after filters
 		self::runMiddleware('after');
+
+		// check for active benchmarking
+		if (self::$config['benchmark']) {
+			$execution = microtime(true)-self::$benchmark['start'];
+			$execution = substr($execution, 0, 7);
+			echo "<p><code> Script executed in " . $execution . " seconds</code></p>";
+		}
 	}
 
 	static private function runMiddleware($position = null)
