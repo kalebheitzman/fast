@@ -315,7 +315,7 @@ class Fast {
 		return self::error404();
 	}
 
-	static private function error404 {
+	static private function error404() {
 		$data = array();
 		$data['error'] = '404 Page not found';
 		// render a json response
