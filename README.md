@@ -9,7 +9,7 @@ Fast is available via a composer package. The first thing you should do is insta
 Drop the following into your composer.json file and then run composer install from the command line.
 
 	"require": {
-		"fastphp/fastphp": "dev-master"
+		"kheitzman/fast": "dev-master"
 	}
 
 ## Usage
