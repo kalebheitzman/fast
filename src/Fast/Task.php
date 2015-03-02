@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Fast - A PHP5.4+ API Micro Framework
  *
@@ -32,21 +31,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// Server information
-$config['server']['name'] = 'fast api server';
-$config['server']['description'] = 'provides fast api based json responses';
-$config['server']['version'] = '0.1.0';
-$config['server_info'] = true;
+ namespace Fast;
 
-// Setup the environment
-$config['server_path'] = dirname(dirname(__FILE__));
-$config['base_path'] = $_SERVER['REQUEST_URI'];
-$config['environment'] = 'development';
+trait Task {
 
-// database settings
-$config['mongo']['server'] = 'locahost';
-$config['mongo']['port'] = 27017;
-$config['mongo']['name'] = 'fast';
-
-// enable benchmark
-$config['benchmark'] = false;
+}
