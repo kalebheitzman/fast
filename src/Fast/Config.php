@@ -1,9 +1,9 @@
 <?php
 
 // Server information
-$config['server_name'] = 'fast api server';
-$config['server_description'] = 'provides fast api based json responses';
-$config['server_version'] = '0.1.0';
+$config['server']['name'] = 'fast api server';
+$config['server']['description'] = 'provides fast api based json responses';
+$config['server']['version'] = '0.1.0';
 $config['server_info'] = true;
 
 // Setup the environment

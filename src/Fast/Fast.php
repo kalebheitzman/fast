@@ -71,6 +71,11 @@ class Fast {
 	use Middleware;
 
 	/**
+	 * Mongo trait
+	 */
+	use Mongo;
+
+	/**
 	 *	Response trait 
 	 */
 	use Response;
@@ -84,6 +89,16 @@ class Fast {
 	 * Stack trait
 	 */
 	use Stack;
+
+	/**
+	 * Getters trait
+	 */
+	use Getters;
+
+	/**
+	 * Setters trait
+	 */
+	use Setters;
 
 	/**
 	 *	Initialize Fast
@@ -106,34 +121,6 @@ class Fast {
 		}
 	}
 
-	static private function setServerInfo() {
-		$information = array();
-		$information['server']['name'] = 'fast api server';
-		$information['server']['description'] = 'provides fast api based json responses';
-		$information['server']['version'] = '0.1.0';
-
-		self::setData($information);
-	}
-
-	/**
-	 *	Initialize the ModelEngine in Fast
-	 */
-	static public function modelEngine($engine = null)
-	{
-		if (is_null($engine)) 
-			die('Woah! I need some footware. Define a model engine through Fast::modelEngine($engine).');
-		else
-			self::$modelEngine = $engine;
-	}
-
-	/**
-	 *	The Database 
-	 */
-	static public function db()
-	{
-		return self::$modelEngine;
-	}
-
 	/**
 	 *	Go Run Fast!
 	 *
@@ -147,16 +134,6 @@ class Fast {
 		self::findRoute();
 		// execute the closure
 		self::runRoute();
-	}
-
-	/**
-	 *	Set the data 
-	 */
-	static public function setData($data = null)
-	{
-		foreach ($data as $key => $value) {
-			self::$response[$key] = $value;
-		}
 	}
 
 } /* EOF Fast.php */
