@@ -179,7 +179,7 @@ class Fast {
 	/**
 	 *	Render a JSON response  
 	 */
-	static private function json($data = array())
+	static public function json($data = array())
 	{
 		
 		// check for active benchmarking
@@ -318,7 +318,7 @@ class Fast {
 	static private function error404 {
 		$data = array();
 		$data['error'] = '404 Page not found';
-
+		// render a json response
 		return self::json($data);
 	}
 

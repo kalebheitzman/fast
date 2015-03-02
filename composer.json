@@ -1,9 +1,9 @@
 {
-	"name": "fastapp/fastapp",
+	"name": "kheitzman/fast",
 	"type": "library",
-	"description": "PHP View-Model Micro Framework",
+	"description": "PHP API Micro Framework",
 	"keywords": ["router", "framework", "fast"],
-	"homepage": "https://github.com/kalebheitzman/fast-microframework",
+	"homepage": "https://github.com/kalebheitzman/fast",
 	"license": "MIT",
 	"authors": [
 		{
