@@ -146,12 +146,15 @@ class Fast {
 		self::$actions = array();
 		// set response to a blank array
 		self::$response = array();
-		// set server information
-		self::setServerInfo();
 		// load $defaultSettings
 		require 'config.php';
 		// Configuration
 		self::$config = array_merge($config, $appConfig);
+		// set server information
+		if (self::$config['server_info']) {
+			self::setServerInfo();
+		}
+
 	}
 
 	static private function setServerInfo() {
