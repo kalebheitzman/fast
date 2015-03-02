@@ -217,10 +217,10 @@ class Fast {
 	{
 		if (is_null($position)) return false;
 		foreach(self::$middleware as $middleware) {
-			if (array_key_exists($position, $middleware)) {
-				$callback = self::$middleware[$position][$middleware];
-				call_user_func($callback);
-			}
+
+			$key = key(self::$middleware[$position]);
+			$callback = self::$middleware[$position][$key];
+			call_user_func($callback);
 		}
 	}
 
