@@ -4,8 +4,8 @@
  *
  * @author 		Kaleb Heitzman <kalebheitzman@gmail.com>
  * @copyright 	2015 Kaleb Heitzman
- * @link 		https://github.com/kalebheitzman/fastphp
- * @license 	https://github.com/kalebheitzman/fastphp/blob/master/LICENSE
+ * @link 		https://github.com/kalebheitzman/fast
+ * @license 	https://github.com/kalebheitzman/fast/blob/master/LICENSE
  * @version 	0.1.0
  * @package  	Fast
  *

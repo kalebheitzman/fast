@@ -1,6 +1,6 @@
 <?php
 /**
- * Fast - A PHP5 API Micro Framework
+ * Fast - A PHP5.4+ API Micro Framework
  *
  * @author 		Kaleb Heitzman <kalebheitzman@gmail.com>
  * @copyright 	2015 Kaleb Heitzman
