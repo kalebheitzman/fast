@@ -2,7 +2,7 @@
 /**
  * Fast - A PHP5 View-Model Micro Framework
  *
- * @author 		Kaleb Heitzman <jkheitzman@gmail.com>
+ * @author 		Kaleb Heitzman <kalebheitzman@gmail.com>
  * @copyright 	2013 Kaleb Heitzman
  * @link 		https://github.com/kalebheitzman/fastphp
  * @license 	https://github.com/kalebheitzman/fastphp/blob/master/LICENSE
@@ -313,6 +313,13 @@ class Fast {
 		}
 		// no matches were found
 		return self::error404();
+	}
+
+	static private function error404 {
+		$data = array();
+		$data['error'] = '404 Page not found';
+
+		return self::json($data);
 	}
 
 } /* EOF Fast.php */
