@@ -1,13 +1,13 @@
 <?php
 /**
- * Fast - A PHP5 View-Model Micro Framework
+ * Fast - A PHP5 API Micro Framework
  *
  * @author 		Kaleb Heitzman <kalebheitzman@gmail.com>
  * @copyright 	2013 Kaleb Heitzman
  * @link 		https://github.com/kalebheitzman/fastphp
  * @license 	https://github.com/kalebheitzman/fastphp/blob/master/LICENSE
  * @version 	0.1.0
- * @package  	FastPHP
+ * @package  	Fast
  *
  * MIT License
  * 
@@ -34,12 +34,12 @@
 namespace Fast;
 
 /**
- * FastApp
+ * Fast
  *
- * FastApp is a View-Model Framework with a RESTful HTTP router.
+ * Fast is an API Framework with a RESTful HTTP router.
  * 
  * @package Fast
- * @author  Kaleb Heitzman <jkheitzman@gmail.com>
+ * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
  * @since  0.1.0
  */
 class Fast {
