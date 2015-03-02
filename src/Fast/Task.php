@@ -35,4 +35,10 @@
 
 trait Task {
 
+	static public function addTask()
+	{
+		$args = func_get_args();
+		
+	}
+
 }
