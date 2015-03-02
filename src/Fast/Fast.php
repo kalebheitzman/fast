@@ -43,10 +43,14 @@ namespace Fast;
  * @since  0.1.0
  */
 
+require 'Getters.php';
 require 'Middleware.php';
+require 'Mongo.php';
 require 'Response.php';
 require 'Router.php';
+require 'Setters.php';
 require 'Stack.php';
+require 'Task.php';
 
 class Fast {
 
@@ -99,6 +103,11 @@ class Fast {
 	 * Setters trait
 	 */
 	use Setters;
+
+	/**
+	 * Task trait
+	 */
+	use Task; 
 
 	/**
 	 *	Initialize Fast
