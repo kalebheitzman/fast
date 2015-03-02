@@ -1,6 +1,6 @@
-# PHP 5.3 View Model Micro Framework
+# PHP 5.3 API Micro Framework
 
-Fast is a PHP 5.3+ View Model Micro Framework for building light-weight web applications. Use the Fast::get(), Fast::post(), etc methods to build your app and use your own templating, db, minimizing libraries of choice. We get you to the party and then it's your job to shine.
+Fast is a PHP 5.3+ API Micro Framework for building APIs. Use the Fast::get(), Fast::post(), etc methods to build your api. Use your own databse libraries of choice and etc. We get you to the party and then it's your job to shine.
 
 ## Installation
 
@@ -64,6 +64,10 @@ This will use composers autoload feature and alias Fast as Fast for easier use.
 	Fast::get('feed', 'listen', function() {
 		echo "Registering a listening agent";
 	});
+
+## Middleware
+
+You can add middleware before and after each response and request.
 
 	Fast::before('authenticate', function() {
 		echo "Authenticating";

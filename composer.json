@@ -3,12 +3,12 @@
 	"type": "library",
 	"description": "PHP View-Model Micro Framework",
 	"keywords": ["router", "framework", "fast"],
-	"homepage": "https://github.com/kalebheitzman/fastphp",
+	"homepage": "https://github.com/kalebheitzman/fast-microframework",
 	"license": "MIT",
 	"authors": [
 		{
 			"name": "Kaleb Heitzman",
-			"email": "jkheitzman@gmail.com",
+			"email": "kalebheitzman@gmail.com",
 			"homepage": "https://github.com/kalebheitzman",
 			"role": "Developer"
 		}
