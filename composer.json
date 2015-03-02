@@ -5,6 +5,7 @@
 	"keywords": ["router", "framework", "fast"],
 	"homepage": "https://github.com/kalebheitzman/fast",
 	"license": "MIT",
+	"version": "0.1.0",
 	"authors": [
 		{
 			"name": "Kaleb Heitzman",
