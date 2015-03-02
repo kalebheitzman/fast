@@ -177,6 +177,24 @@ class Fast {
 	}
 
 	/**
+	 *	Render a JSON response  
+	 */
+	static private function json($data = array())
+	{
+		
+		// check for active benchmarking
+		if (self::$config['benchmark']) {
+			$execution = microtime(true)-self::$benchmark['start'];
+			$execution = substr($execution, 0, 7);
+			$data['benchmark'] = $execution;
+		}
+
+		// render a json response
+		header('Content-Type: application/json');
+		echo json_encode($data);
+	}
+
+	/**
 	 *	Go Run Fast!
 	 *
 	 *	Finds a route to display and runs view and model logic based on the
@@ -193,13 +211,6 @@ class Fast {
 		self::runRoute();
 		// execute after filters
 		self::runMiddleware('after');
-
-		// check for active benchmarking
-		if (self::$config['benchmark']) {
-			$execution = microtime(true)-self::$benchmark['start'];
-			$execution = substr($execution, 0, 7);
-			echo "<p><code> Script executed in " . $execution . " seconds</code></p>";
-		}
 	}
 
 	static private function runMiddleware($position = null)
