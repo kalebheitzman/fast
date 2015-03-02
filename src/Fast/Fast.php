@@ -216,9 +216,9 @@ class Fast {
 	static private function runMiddleware($position = null)
 	{
 		if (is_null($position)) return false;
-		foreach(self::$route['middleware'] as $filter) {
-			if (array_key_exists($filter, self::$middleware[$position])) {
-				$callback = self::$middleware[$position][$filter];
+		foreach(self::$middleware as $middleware) {
+			if (array_key_exists($position, $middleware)) {
+				$callback = self::$middleware[$position][$middleware];
 				call_user_func($callback);
 			}
 		}
@@ -248,12 +248,12 @@ class Fast {
 		// the pattern to test against
 		$pattern = array_shift($args);
 		// the callable
-	    $callback = array_shift($args);
+	    $callback = array_pop($args);
 	    // the filterrs
 	    $filter = array_shift($args);
 	    // add the route to the routes var
 	    self::$routes[$method][$pattern] = array(
-	    	"method" => $method, 
+	    	"method" => $method,
 	    	"callback" => $callback, 
 	    	"middleware" => $filter
 	    );
