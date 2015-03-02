@@ -45,4 +45,29 @@ namespace Fast;
 
 class Response {
 	
+	/**
+	 *	Render a JSON response  
+	 */
+	static public function response()
+	{
+		// check for active benchmarking
+		if (self::$config['benchmark']) {
+			$execution = microtime(true)-self::$benchmark['start'];
+			$execution = substr($execution, 0, 7);
+			self::$response['benchmark']['start'] = self::$benchmark['start'];
+			self::$response['benchmark']['end'] = microtime(true);
+			self::$response['benchmark']['execution_time'] = $execution.' seconds';
+		}
+		// render a json response
+		header('Content-Type: application/json');
+		echo json_encode(self::$response);
+	}
+
+	static private function error404() {
+		$data = array();
+		$data['error'] = '404 Page not found';
+		// render a json response
+		return self::json($data);
+	}
+
 }

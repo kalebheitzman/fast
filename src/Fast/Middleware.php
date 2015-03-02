@@ -45,4 +45,30 @@ namespace Fast;
 
 class Middleware {
 	
+	static private function runMiddleware($position = null)
+	{
+		if (is_null($position)) return false;
+
+		foreach(self::$route['middleware'] as $middleware) {
+
+			$cb = self::$middleware[$middleware]['cb'];
+			$position = self::$middleware[$middleware]['position'];
+			
+			// set the position
+			if ($position == 'before') $position = -1;
+			if ($position == 'after') $position = 1;
+
+			self::buildActions($position, $cb);
+		}
+	}
+
+	/**
+	 *	Middleware
+	 */
+	static public function middleware($name, $cb, $position)
+	{
+		self::$middleware[$name]['cb'] = $cb;
+		self::$middleware[$name]['position'] = $position;
+	}
+	
 }

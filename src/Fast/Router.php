@@ -45,4 +45,136 @@ namespace Fast;
 
 class Router {
 	
+	/**
+	 * GET Request
+	 */
+	static public function get()
+	{
+		$args = func_get_args();
+		self::mapRoute($args, "GET");
+	}
+	
+	/**
+	 * POST Request
+	 */
+	static public function post()
+	{
+		$args = func_get_args();
+		self::mapRoute($args, "POST");
+	}
+	
+	/**
+	 * PUT Request
+	 */
+	static public function put()
+	{
+		$args = func_get_args();
+		self::mapRoute($args, "PUT");
+	}
+	
+	/**
+	 * DELETE Request
+	 */
+	static public function delete()
+	{
+		$args = func_get_args();
+		self::mapRoute($args, "DELETE");
+	}
+
+	/**
+	 * OPTIONS Request
+	 */
+	static public function options()
+	{
+		$args = func_get_args();
+		self::mapRoute($args, "OPTIONS");
+	}
+
+	/**
+	 *	Run the route
+	 */
+	static private function runRoute()
+	{
+		// execute any before middleware
+		self::runMiddleware('before');
+		// execute the route
+		self::buildActions(0, self::$route['cb'], self::$route['params']);
+		// run actions
+		self::runActions();
+	}
+
+	/**
+	 * Map route
+	 */
+	static private function mapRoute($args = array(), $method = null)
+	{
+		// the pattern to test against
+		$pattern = array_shift($args);
+		// the callable
+	    $callback = array_pop($args);
+	    // the filterrs
+	    $middleware = $args;
+	    // add the route to the routes var
+	    self::$routes[$method][$pattern] = array(
+	    	"method" => $method,
+	    	"callback" => $callback, 
+	    	"middleware" => $middleware
+	    );
+	}
+
+	/**
+	 *	Find a Route
+	 */
+	static private function findRoute($url = array())
+	{
+		// Get the route called
+		$pattern = isset($_SERVER['PATH_INFO']) ? ltrim($_SERVER['PATH_INFO'], "/") : "/";
+		// Get the method
+		$method = $_SERVER['REQUEST_METHOD'];
+		// Setup the URL
+		$url['original'] = $pattern;
+		$url['path'] = explode('/', parse_url($pattern, PHP_URL_PATH));
+		$url['length'] = count($url['path']);
+		// Parse the patterns
+		foreach (self::$routes[$method] as $pattern => $data) {
+			$parameters = array();
+			// get pattern info
+			$pattern = array (
+				'original' => $pattern,
+				'path' => explode('/', $pattern)
+			);
+			$pattern['length'] = count($pattern['path']);
+			// this pattern is irrelevant 
+			if ($url['length'] <> $pattern['length']) {
+				continue;
+			}
+			// pattern matching
+			foreach($pattern['path'] as $i => $key) 
+			{
+				if (strpos($key, ':') === 0)
+				{
+					$parameters[substr($key, 1)] = $url['path'][$i];
+				}
+				// this filter is irrelevant
+				else if($key != $url['path'][$i])
+				{
+					continue 2;
+				}
+			}
+			// check for parameters key		
+			if ( ! array_key_exists('parameters', $data))
+			{
+				$data['parameters'] = array();
+			}
+			// add the parameters
+			$data['parameters'] = array_merge($data['parameters'], $parameters);
+			self::$route['middleware'] = $data['middleware'];
+			self::$route['cb'] = $data['callback'];
+			self::$route['params'] = $data['parameters']; 
+			// return the data
+			return true;
+		}
+		// no matches were found
+		return self::error404();
+	}
 }

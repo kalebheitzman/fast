@@ -42,37 +42,6 @@ namespace Fast;
  * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
  * @since  0.1.0
  */
+class Base {
 
-class Stack {
-	
-	/**
-	 *	Build the actions list 
-	 */
-	static private function buildActions($position, $cb, $args = null)
-	{
-		// build the action
-		$action = array();
-		$action['position'] = $position;
-		$action['cb'] = $cb;
-		$action['args'] = is_null($args) ? array() : $args;
-		// push the action onto actions
-		array_push(self::$stack, $action);
-	}
-
-	/**
-	 *	Run the actions list 
-	 */
-	static private function runActions() {
-		// sort the actions by position
-		usort(self::$stack, function($a1, $a2) {
-			return $a1['position'] - $a2['position'];
-		});
-		// run each action in the stack
-		foreach(self::$stack as $action) {
-			call_user_func_array($action['cb'], $action['args']);
-		}
-
-		self::response();
-	}
-	
 }
