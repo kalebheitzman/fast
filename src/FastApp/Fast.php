@@ -130,7 +130,7 @@ class Fast {
 	static public function prepare($appConfig = array())
 	{
 		// Benchmarking
-		self::$benchmark = array();
+		self::$benchmark = array(); 
 		self::$benchmark['start'] = microtime(true);
 
 		// load $defaultSettings
