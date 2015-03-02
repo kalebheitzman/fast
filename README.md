@@ -1,6 +1,6 @@
-# PHP 5.3 API Micro Framework
+# PHP 5.4 API Micro Framework
 
-Fast is a PHP 5.3+ API Micro Framework for building APIs. Use the Fast::get(), Fast::post(), etc methods to build your api. Use your own databse libraries of choice and etc. We get you to the party and then it's your job to shine.
+Fast is a PHP 5.4+ API Micro Framework for building APIs. Use the Fast::get(), Fast::post(), etc methods to build your api. Use your own databse libraries of choice and etc. We get you to the party and then it's your job to shine.
 
 ## Installation
 
