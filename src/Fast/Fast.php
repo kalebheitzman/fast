@@ -146,10 +146,21 @@ class Fast {
 		self::$actions = array();
 		// set response to a blank array
 		self::$response = array();
+		// set server information
+		self::setServerInfo();
 		// load $defaultSettings
 		require 'config.php';
 		// Configuration
 		self::$config = array_merge($config, $appConfig);
+	}
+
+	static private function setServerInfo() {
+		$information = array();
+		$information['server_name'] = 'fast api server';
+		$information['server_description'] = 'provides fast api based json responses';
+		$information['server_version'] = 0.1.0;
+
+		self::setData($information);
 	}
 
 	/**
