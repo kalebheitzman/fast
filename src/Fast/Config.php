@@ -44,7 +44,7 @@ $config['base_path'] = $_SERVER['REQUEST_URI'];
 $config['environment'] = 'development';
 
 // database settings
-$config['mongo']['server'] = 'locahost';
+$config['mongo']['host'] = 'locahost';
 $config['mongo']['port'] = 27017;
 $config['mongo']['name'] = 'fast';
 

@@ -45,23 +45,23 @@ namespace Fast;
 
 trait Mongo {
 
-	/**
-	 *	Initialize the ModelEngine in Fast
-	 */
-	static public function modelEngine($engine = null)
+	protected $db;
+
+	static private function mongoInit()
 	{
-		if (is_null($engine)) 
-			die('Woah! I need some footware. Define a model engine through Fast::modelEngine($engine).');
-		else
-			self::$modelEngine = $engine;
+		$host = self::$config['mongo']['host'];
+		$port = self::$config['mongo']['port'];
+		$database = self::$config['mongo']['name'];
+
+		$connection = sprintf('mongodb://%s:%d/%s', $host, $port, $database);
+		$db = new Mongo($connection);
+
+		$this->db = $db->selectDB($database);
 	}
 
-	/**
-	 *	The Database 
-	 */
-	static public function db()
+	static public function mongo()
 	{
-		return self::$modelEngine;
+		return $this->db;
 	}
 	
 }

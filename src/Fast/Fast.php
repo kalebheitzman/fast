@@ -119,6 +119,8 @@ class Fast {
 		if (self::$config['server_info']) {
 			self::setServerInfo();
 		}
+		// initialize the db
+		self::mongoInit();
 	}
 
 	/**
