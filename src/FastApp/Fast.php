@@ -224,6 +224,9 @@ class Fast {
 		}
 	}
 
+	/**
+	 *	Run the route
+	 */
 	static private function runRoute()
 	{
 		call_user_func_array(self::$route['cb'], self::$route['params']);
