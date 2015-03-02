@@ -43,7 +43,7 @@ namespace Fast;
  * @since  0.1.0
  */
 
-trait Mongo {
+trait Database {
 
 	protected $db;
 

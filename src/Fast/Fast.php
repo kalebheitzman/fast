@@ -45,7 +45,7 @@ namespace Fast;
 
 require 'Getters.php';
 require 'Middleware.php';
-require 'Mongo.php';
+require 'Database.php';
 require 'Response.php';
 require 'Router.php';
 require 'Setters.php';
@@ -75,9 +75,9 @@ class Fast {
 	use Middleware;
 
 	/**
-	 * Mongo trait
+	 * Database trait
 	 */
-	use Mongo;
+	use Database;
 
 	/**
 	 *	Response trait 
