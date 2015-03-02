@@ -60,11 +60,6 @@ class Fast {
 	static protected $config;
 
 	/**
-	 * @var mixed View Templating System
-	 */
-	static protected $viewEngine;
-
-	/**
 	 * @var mixed Database and Model System
 	 */
 	static protected $modelEngine;
@@ -132,46 +127,17 @@ class Fast {
 	/**
 	 *	Prepare Fast
 	 */
-	static public function prepare($config = array())
+	static public function prepare($appConfig = array())
 	{
 		// Benchmarking
 		self::$benchmark = array();
 		self::$benchmark['start'] = microtime(true);
 
-		// declare some default settings true of every app
-		$defaultSettings = array(
-			'server_path' => dirname(dirname(__FILE__)),
-			'base_path' => $_SERVER['REQUEST_URI'],
-			'environment' => 'production',
-			'default_layout' => 'default',
-
-			// parsers
-			'html_parser' => false,
-			'css_parser' => false,
-			'js_parser' => false,
-
-			// locations
-			'styles' => 'styles',
-			'scripts' => 'scripts',
-			'images' => 'images',
-
-			// other
-			'benchmark' => false,
-		);
+		// load $defaultSettings
+		require_once(__ROOT__.'/config.php');
 
 		// Configuration
-		self::$config = array_merge($defaultSettings, $config);
-	}
-
-	/**
-	 *	Initialize the ViewEngine in Fast
-	 */
-	static public function viewEngine($engine = null)
-	{
-		if (is_null($engine)) 
-			die('Woah! I need some eyeware. Define a view engine through Fast::viewEngine($engine).');
-		else
-			self::$viewEngine = $engine;
+		self::$config = array_merge($config, $appConfig);
 	}
 
 	/**
