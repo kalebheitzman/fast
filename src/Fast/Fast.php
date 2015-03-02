@@ -42,7 +42,10 @@ namespace Fast;
  * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
  * @since  0.1.0
  */
-class Fast {
+
+require 'Base.php';
+
+class Fast extends Base {
 
 	/**
 	 * @const string The version of Fast 

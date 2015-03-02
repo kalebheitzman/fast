@@ -44,4 +44,36 @@ namespace Fast;
  */
 class Base {
 
+	/**
+	 * @var Array Configuration
+	 */
+	protected $config;
+
+	/**
+	 *	Initialize Fast API Framework  
+	 */
+	private function __construct()
+	{
+		// initialize configuration
+		require 'Config.php';
+		$this->config = $config;
+
+		// initialize middleware
+		require 'Middleware.php';
+		$this->middleware = new Middleware();
+
+		// initialize response
+		require 'Response.php';
+		$this->response = new Response();
+
+		// initialize router
+		require 'Router.php';
+		$this->router = new Router();
+
+		// initialize stack
+		require 'Stack.php';
+		$this->stack = new Stack();
+
+	}
+
 }
