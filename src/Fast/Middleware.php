@@ -43,8 +43,13 @@ namespace Fast;
  * @since  0.1.0
  */
 
-class Middleware {
+trait Middleware {
 	
+	/**
+	 * @var array Middleware
+	 */
+	static protected $middleware;
+
 	static private function runMiddleware($position = null)
 	{
 		if (is_null($position)) return false;

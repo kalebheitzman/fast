@@ -43,8 +43,13 @@ namespace Fast;
  * @since  0.1.0
  */
 
-class Response {
+trait Response {
 	
+	/**
+	 * @var array Routes
+	 */
+	static protected $response;
+
 	/**
 	 *	Render a JSON response  
 	 */

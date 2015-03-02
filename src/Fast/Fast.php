@@ -1,6 +1,6 @@
 <?php
 /**
- * Fast - A PHP5 API Micro Framework
+ * Fast - A PHP5.4+ API Micro Framework
  *
  * @author 		Kaleb Heitzman <kalebheitzman@gmail.com>
  * @copyright 	2015 Kaleb Heitzman
@@ -43,9 +43,12 @@ namespace Fast;
  * @since  0.1.0
  */
 
-require 'Base.php';
+require 'Middleware.php';
+require 'Response.php';
+require 'Router.php';
+require 'Stack.php';
 
-class Fast extends Base {
+class Fast {
 
 	/**
 	 * @const string The version of Fast 
@@ -58,61 +61,49 @@ class Fast extends Base {
 	static protected $benchmark;
 
 	/**
-	 * @var array Configuration
+	 * @var Array Configuration
 	 */
 	static protected $config;
 
 	/**
-	 * @var array Middleware
-	 */	
-	static protected $middleware;
-
-	/**
-	 * @var mixed Database and Model System
+	 *	Middleware trait 
 	 */
-	static protected $db;
+	use Middleware;
 
 	/**
-	 * @var array Processed routes
+	 *	Response trait 
 	 */
-	static protected $routes;
+	use Response;
 
 	/**
-	 * @var array Current processed route
-	 */	
-	static protected $route;
-
-	/**
-	 * @var array Stack
+	 *	Router trait 
 	 */
-	static protected $stack;
+	use Router;
 
 	/**
-	 * @var array Response  
+	 * Stack trait
 	 */
-	static protected $response;
+	use Stack;
 
 	/**
 	 *	Initialize Fast
 	 */
 	static public function init($appConfig = array())
 	{
+		// var_dump(self::$config);
 		// Benchmarking
 		self::$benchmark = array(); 
 		self::$benchmark['start'] = microtime(true);
-		// set actions to a blank array
+		// initialize the stack
 		self::$stack = array();
-		// set response to a blank array
-		self::$response = array();
 		// load $defaultSettings
-		require 'config.php';
+		require 'Config.php';
 		// Configuration
 		self::$config = array_merge($config, $appConfig);
 		// set server information
 		if (self::$config['server_info']) {
 			self::setServerInfo();
 		}
-
 	}
 
 	static private function setServerInfo() {

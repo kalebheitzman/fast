@@ -43,18 +43,23 @@ namespace Fast;
  * @since  0.1.0
  */
 
-class Stack {
+trait Stack {
 	
+	/**
+	 * @var array Stack
+	 */
+	static protected $stack;
+
 	/**
 	 *	Build the actions list 
 	 */
-	static private function buildActions($position, $cb, $args = null)
+	static private function buildActions($position, $cb, $args = array())
 	{
 		// build the action
 		$action = array();
 		$action['position'] = $position;
 		$action['cb'] = $cb;
-		$action['args'] = is_null($args) ? array() : $args;
+		$action['args'] = $args;
 		// push the action onto actions
 		array_push(self::$stack, $action);
 	}

@@ -43,8 +43,18 @@ namespace Fast;
  * @since  0.1.0
  */
 
-class Router {
+trait Router {
 	
+	/**
+	 * @var array Routes
+	 */
+	static protected $routes;
+
+	/**
+	 * @var array Route
+	 */
+	static protected $route;
+
 	/**
 	 * GET Request
 	 */
