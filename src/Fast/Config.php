@@ -3,7 +3,7 @@
 // Server information
 $config['server_name'] = 'fast api server';
 $config['server_description'] = 'provides fast api based json responses';
-$config['server_version'] = 0.1.0;
+$config['server_version'] = '0.1.0';
 $config['include_in_response'] = true;
 
 // Setup the environment

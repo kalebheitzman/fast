@@ -156,9 +156,9 @@ class Fast {
 
 	static private function setServerInfo() {
 		$information = array();
-		$information['server_name'] = 'fast api server';
-		$information['server_description'] = 'provides fast api based json responses';
-		$information['server_version'] = 0.1.0;
+		$information['server']['name'] = 'fast api server';
+		$information['server']['description'] = 'provides fast api based json responses';
+		$information['server']['version'] = '0.1.0';
 
 		self::setData($information);
 	}
@@ -191,7 +191,9 @@ class Fast {
 		if (self::$config['benchmark']) {
 			$execution = microtime(true)-self::$benchmark['start'];
 			$execution = substr($execution, 0, 7);
-			self::$response['benchmark'] = $execution;
+			self::$response['benchmark']['start'] = self::$benchmark['start'];
+			self::$response['benchmark']['end'] = microtime(true);
+			self::$response['benchmark']['execution_time'] = $execution.' seconds';
 		}
 		// render a json response
 		header('Content-Type: application/json');
