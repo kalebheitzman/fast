@@ -80,6 +80,16 @@ class Fast {
 	static protected $middleware;
 
 	/**
+	 * @var array Actions
+	 */
+	static protected $actions;
+
+	/**
+	 * @var array Response  
+	 */
+	static protected $response;
+
+	/**
 	 * GET Request
 	 */
 	static public function get()
@@ -132,10 +142,12 @@ class Fast {
 		// Benchmarking
 		self::$benchmark = array(); 
 		self::$benchmark['start'] = microtime(true);
-
+		// set actions to a blank array
+		self::$actions = array();
+		// set response to a blank array
+		self::$response = array();
 		// load $defaultSettings
 		require 'config.php';
-
 		// Configuration
 		self::$config = array_merge($config, $appConfig);
 	}
@@ -152,23 +164,6 @@ class Fast {
 	}
 
 	/**
-	 *	Render a template using the viewEngine
-	 */
-	static public function render($view, $data = null)
-	{
-		$viewInfo = pathinfo($view);
-		if ( ! array_key_exists('extension', $viewInfo)) {
-			$view = $view . ".html";
-		}
-		if (method_exists(self::$viewEngine, 'render')) {
-			echo self::$viewEngine->render($view, $data);
-		}
-		else {
-			die('ViewEngine fail. Does your ViewEngine have a render method?');
-		}
-	}
-
-	/**
 	 *	The Database 
 	 */
 	static public function db()
@@ -179,19 +174,17 @@ class Fast {
 	/**
 	 *	Render a JSON response  
 	 */
-	static public function json($data = array())
+	static public function response()
 	{
-		
 		// check for active benchmarking
 		if (self::$config['benchmark']) {
 			$execution = microtime(true)-self::$benchmark['start'];
 			$execution = substr($execution, 0, 7);
-			$data['benchmark'] = $execution;
+			self::$response['benchmark'] = $execution;
 		}
-
 		// render a json response
 		header('Content-Type: application/json');
-		echo json_encode($data);
+		echo json_encode(self::$response);
 	}
 
 	/**
@@ -205,22 +198,24 @@ class Fast {
 	{
 		// Find a matching route or buzz out.
 		self::findRoute();
-		// execute any before middleware
-		self::runMiddleware('before');
 		// execute the closure
 		self::runRoute();
-		// execute after middleware
-		self::runMiddleware('after');
 	}
 
 	static private function runMiddleware($position = null)
 	{
 		if (is_null($position)) return false;
-		foreach(self::$middleware as $middleware) {
 
-			$key = key(self::$middleware[$position]);
-			$callback = self::$middleware[$position][$key];
-			call_user_func($callback);
+		foreach(self::$route['middleware'] as $middleware) {
+
+			$cb = self::$middleware[$middleware]['cb'];
+			$position = self::$middleware[$middleware]['position'];
+			
+			// set the position
+			if ($position == 'before') $position = -1;
+			if ($position == 'after') $position = 1;
+
+			self::buildActions($position, $cb);
 		}
 	}
 
@@ -229,7 +224,52 @@ class Fast {
 	 */
 	static private function runRoute()
 	{
-		call_user_func_array(self::$route['cb'], self::$route['params']);
+		// execute any before middleware
+		self::runMiddleware('before');
+		// execute the route
+		self::buildActions(0, self::$route['cb'], self::$route['params']);
+		// run actions
+		self::runActions();
+	}
+
+	/**
+	 *	Set the data 
+	 */
+	static public function setData($data = null)
+	{
+		foreach ($data as $key => $value) {
+			self::$response[$key] = $value;
+		}
+	}
+
+	/**
+	 *	Build the actions list 
+	 */
+	static private function buildActions($position, $cb, $args = null)
+	{
+		// build the action
+		$action = array();
+		$action['position'] = $position;
+		$action['cb'] = $cb;
+		$action['args'] = is_null($args) ? array() : $args;
+		// push the action onto actions
+		array_push(self::$actions, $action);
+	}
+
+	/**
+	 *	Run the actions list 
+	 */
+	static private function runActions() {
+		// sort the actions by position
+		usort(self::$actions, function($a1, $a2) {
+			return $a1['position'] - $a2['position'];
+		});
+		// run each action in the stack
+		foreach(self::$actions as $action) {
+			call_user_func_array($action['cb'], $action['args']);
+		}
+
+		self::response();
 	}
 
 	/**
@@ -237,7 +277,8 @@ class Fast {
 	 */
 	static public function middleware($name, $cb, $position)
 	{
-		self::$middleware[$position][$name] = $cb;
+		self::$middleware[$name]['cb'] = $cb;
+		self::$middleware[$name]['position'] = $position;
 	}
 
 	/**
@@ -250,12 +291,12 @@ class Fast {
 		// the callable
 	    $callback = array_pop($args);
 	    // the filterrs
-	    $filter = array_shift($args);
+	    $middleware = $args;
 	    // add the route to the routes var
 	    self::$routes[$method][$pattern] = array(
 	    	"method" => $method,
 	    	"callback" => $callback, 
-	    	"middleware" => $filter
+	    	"middleware" => $middleware
 	    );
 	}
 
