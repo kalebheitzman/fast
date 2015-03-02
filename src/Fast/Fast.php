@@ -134,7 +134,7 @@ class Fast {
 		self::$benchmark['start'] = microtime(true);
 
 		// load $defaultSettings
-		require_once(__ROOT__.'/config.php');
+		require 'config.php';
 
 		// Configuration
 		self::$config = array_merge($config, $appConfig);
@@ -205,18 +205,18 @@ class Fast {
 	{
 		// Find a matching route or buzz out.
 		self::findRoute();
-		// execute any before filters
+		// execute any before middleware
 		self::runMiddleware('before');
 		// execute the closure
 		self::runRoute();
-		// execute after filters
+		// execute after middleware
 		self::runMiddleware('after');
 	}
 
 	static private function runMiddleware($position = null)
 	{
 		if (is_null($position)) return false;
-		foreach(self::$route['filters'] as $filter) {
+		foreach(self::$route['middleware'] as $filter) {
 			if (array_key_exists($filter, self::$middleware[$position])) {
 				$callback = self::$middleware[$position][$filter];
 				call_user_func($callback);
@@ -255,7 +255,7 @@ class Fast {
 	    self::$routes[$method][$pattern] = array(
 	    	"method" => $method, 
 	    	"callback" => $callback, 
-	    	"filters" => $filter
+	    	"middleware" => $filter
 	    );
 	}
 
@@ -305,7 +305,7 @@ class Fast {
 			}
 			// add the parameters
 			$data['parameters'] = array_merge($data['parameters'], $parameters);
-			self::$route['filters'] = $data['filters'];
+			self::$route['middleware'] = $data['middleware'];
 			self::$route['cb'] = $data['callback'];
 			self::$route['params'] = $data['parameters']; 
 			// return the data
