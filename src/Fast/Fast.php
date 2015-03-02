@@ -125,9 +125,9 @@ class Fast {
 	}
 
 	/**
-	 *	Prepare Fast
+	 *	Initialize Fast
 	 */
-	static public function prepare($appConfig = array())
+	static public function init($appConfig = array())
 	{
 		// Benchmarking
 		self::$benchmark = array(); 
