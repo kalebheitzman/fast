@@ -2,10 +2,9 @@
 	"name": "kheitzman/fast",
 	"type": "library",
 	"description": "PHP API Micro Framework",
-	"keywords": ["router", "framework", "fast"],
+	"keywords": ["router", "framework", "fast", "api"],
 	"homepage": "https://github.com/kalebheitzman/fast",
 	"license": "MIT",
-	"version": "0.1.0",
 	"authors": [
 		{
 			"name": "Kaleb Heitzman",
