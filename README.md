@@ -21,7 +21,7 @@ Assuming that you're using index.php and an .htaccess file to route requests, ad
 
 This will use composers autoload feature and alias Fast as Fast for easier use.
 
-## Examples
+## GET Examples
 
 	Fast::get('/', function() {
 		Fast::render('index');
@@ -41,28 +41,28 @@ This will use composers autoload feature and alias Fast as Fast for easier use.
 		echo "Entry with id " . $id;
 	});
 
+## POST Examples
+
 	Fast::post('entry', function() {
 		echo "Inserting a new entry";
 	});
+
+## PUT Examples
 
 	Fast::put('entry/:id', function($id) {
 		echo "Updating an existing entry";
 	});
 
+## DELETE examples
+
 	Fast::delete('entry/:id', function($id) {
 		echo "Deleting an entry";
 	});
 
+## OPTIONS examples
+
 	Fast::options('entries', function() {
 		echo "Getting the HTTP OPTIONS VERB about entries";
-	});
-
-	Fast::get('article', 'authenticate', function() {
-		echo "Authenticate before seeing articles";
-	});
-
-	Fast::get('feed', 'listen', function() {
-		echo "Registering a listening agent";
 	});
 
 ## Middleware
@@ -75,4 +75,12 @@ You can add middleware before and after each response and request.
 
 	Fast::after('listen', function() {
 		echo "listen";
+	});
+
+	Fast::get('article', 'authenticate', function() {
+		echo "Authenticate before seeing articles";
+	});
+
+	Fast::get('feed', 'listen', function() {
+		echo "Registering a listening agent";
 	});
