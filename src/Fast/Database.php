@@ -45,8 +45,14 @@ namespace Fast;
 
 trait Database {
 
-	protected $db;
+	/**
+	 * @var Object MongoDb Connection
+	 */
+	static protected $mongo;
 
+	/**
+	 * Initialize MongoDb 
+	 */
 	static private function mongoInit()
 	{
 		$host = self::$config['mongo']['host'];
@@ -54,14 +60,14 @@ trait Database {
 		$database = self::$config['mongo']['name'];
 
 		$connection = sprintf('mongodb://%s:%d/%s', $host, $port, $database);
-		$db = new Mongo($connection);
+		$db = new \MongoClient($connection);
 
-		$this->db = $db->selectDB($database);
+		self::$mongo = $db->$database;
 	}
 
 	static public function mongo()
 	{
-		return $this->db;
+		return self::$mongo;
 	}
 	
 }

@@ -47,9 +47,9 @@ trait Setters {
 
 	static private function setServerInfo() {
 		$information = array();
-		$information['server']['name'] = 'fast api server';
-		$information['server']['description'] = 'provides fast api based json responses';
-		$information['server']['version'] = '0.1.0';
+		$information['server']['name'] = self::$config['server']['name'];
+		$information['server']['description'] = self::$config['server']['description'];
+		$information['server']['version'] = self::$config['server']['version'] ;
 
 		self::setData($information);
 	}

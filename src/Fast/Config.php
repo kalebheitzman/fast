@@ -33,8 +33,8 @@
  */
 
 // Server information
-$config['server']['name'] = 'fast api server';
-$config['server']['description'] = 'provides fast api based json responses';
+$config['server']['name'] = 'Fast API Server';
+$config['server']['description'] = 'Provides JSON data responses.';
 $config['server']['version'] = '0.1.0';
 $config['server_info'] = true;
 
@@ -44,7 +44,7 @@ $config['base_path'] = $_SERVER['REQUEST_URI'];
 $config['environment'] = 'development';
 
 // database settings
-$config['mongo']['host'] = 'locahost';
+$config['mongo']['host'] = 'localhost';
 $config['mongo']['port'] = 27017;
 $config['mongo']['name'] = 'fast';
 
