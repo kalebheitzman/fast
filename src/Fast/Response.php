@@ -73,8 +73,21 @@ trait Response {
 			'DELETE' => 'OK resource deleted'
 		);
 		$status[201] = 'Created';
-		$status[401] = 'Access denied';
-		$status[404] = 'Page not found';
+		$status[202] = 'Accepted';
+		$status[203] = 'Non-Authoritative Information';
+		$status[204] = 'No Content';
+		$status[301] = 'Moved Permanently';
+		$status[400] = 'Bad Request';
+		$status[401] = 'Access Denied';
+		$status[402] = 'Payment Required';
+		$status[403] = 'Forbidden';
+		$status[404] = 'Not Found';
+		$status[405] = 'Method Not Allowed';
+		$status[419] = 'Authentication Timeout';
+		$status[429] = 'Too Many Requests';
+		$status[500] = 'Internal Sever Error';
+		$status[501] = 'Not Implemented';
+		$status[503] = 'Service Unavailable';
 
 		// common error codes
 		$error_codes = array( 401, 404, 500 );
@@ -94,7 +107,7 @@ trait Response {
 			// get defined message
 			$message = ( ! is_null( $message ) ) ? $message : $status[$code];
 			// set the http code
-			self::$response['status']['status'] = $code;
+			self::$response['status']['code'] = $code;
 			// set a helpful message
 			if ( in_array( $code, $error_codes ) ) {
 				self::$response['status']['error'] = $message;

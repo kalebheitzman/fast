@@ -46,7 +46,7 @@ trait Token {
    */
   static public function tokenInit()
   {
-    self::$key = self::$config['jwt_key'];
+    self::$key = self::$config['jwt']['key'];
   }
 
   /**
@@ -55,15 +55,22 @@ trait Token {
    */
 	static public function encodeToken()
 	{
+    // check for email
+    if ( ! isset($_GET['email']) ) {
+      self::response( 400, 'Email not provided in request' );
+    }
     // create/get user based on email address
     $email = $_GET['email'];
     $user_id = self::upsertUserByEmail( $email );
+    // get the time
+    $time = time();
     // create the token to encode
     $token = array(
-      "iss" => self::$config['server']['path'],
-      "aud" => self::$config['server']['path'],
-      "iat" => time(),
-      "sub" => $user_id
+      "iat" => $time, // issued at
+      // "jti" => null,
+      "iss" => self::$config['server']['path'], // issuer
+      "exp" => $time + self::$config['jwt']['time_valid'], // expires
+      "sub" => $user_id // subject
     );
     // encode the token
     $jwt = \JWT::encode( $token, self::$key );
@@ -84,9 +91,14 @@ trait Token {
       // access denied
   		self::response( 401, 'You must provide a token.' );
     }
-    // get the decoded token
-    $decoded = \JWT::decode( $token , self::$key );
-    return $decoded;
+    try {
+      // get the decoded token
+      $decoded = \JWT::decode( $token , self::$key );
+      return $decoded;
+    }
+    catch ( \Exception $e ) {
+      self::response( 401, 'token: ' . $e->getMessage() );
+    }
   }
 
 }

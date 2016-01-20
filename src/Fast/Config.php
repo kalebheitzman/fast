@@ -55,4 +55,5 @@ $config['mongo']['port'] = 27017;
 $config['mongo']['name'] = 'fast';
 
 // jwt key
-$config['jwt_key'] = null;
+$config['jwt']['key'] = null;
+$config['jwt']['time_valid'] = 60; // 60*60*24*30; // 30 days 
