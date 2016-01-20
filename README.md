@@ -143,7 +143,7 @@ Fast outputs JSON responses that include server info, speed benchmarks, and cust
 		},
 		auth: {
 			authenticated: true,
-			token: "98yq34pornasdifg7gasd"
+			token: "98yq34rnasdifg7gasd7vehlk1zf09v3"
 		},
 		entry: {
 			title: "Lorem Ipsum 1",
