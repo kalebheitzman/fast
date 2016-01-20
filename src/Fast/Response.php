@@ -59,9 +59,11 @@ trait Response {
 		if (self::$config['benchmark']) {
 			$execution = microtime(true)-self::$benchmark['start'];
 			$execution = substr($execution, 0, 7);
-			self::$response['benchmark']['start'] = self::$benchmark['start'];
-			self::$response['benchmark']['end'] = microtime(true);
-			self::$response['benchmark']['execution_time'] = $execution.' seconds';
+			$benchmark['start'] = self::$benchmark['start'];
+			$benchmark['end'] = microtime(true);
+			$benchmark['execution_time'] = $execution.' seconds';
+
+			self::$response['benchmark'] = $benchmark;
 		}
 		// render a json response
 		header('Content-Type: application/json');
@@ -69,11 +71,12 @@ trait Response {
 	}
 
 	static private function error404() {
-		$data = array();
-		$data['error'] = '404 Page not found';
+		self::$response['error'] = 'Route not found';
+
 		// render a json response
 		header('Content-Type: application/json');
-		echo json_encode($data);
+		echo json_encode(self::$response);
+		exit();
 	}
 
 }

@@ -59,14 +59,31 @@ trait Stack {
 	 *	Run the actions list
 	 */
 	static private function runStack() {
+
+		// sort the stack
+		ksort( self::$stack );
+
 		// run each action in the stack
-		foreach(self::$stack as $actions ) {
+		foreach(self::$stack as $key => $actions ) {
 			foreach( $actions as $action ) {
+
+				$response_key = key(self::$stack[$key]);
+				if ( $response_key == 'route' ) $response_key = 'data';
+
 				$cb = $action['cb'];
 				$args = isset( $action['params'] ) ? $action['params'] : array();
-				call_user_func_array($cb, $args);
+				$results = call_user_func_array($cb, $args);
+
+				// add the data to the response
+				if ( ! is_null( $results ) && is_array( $results) ) {
+					foreach ( $results as $key => $result ) {
+						self::$response[$key] = $result;
+					}
+				}
+
 			}
 		}
+
 		self::response();
 	}
 
@@ -87,9 +104,6 @@ trait Stack {
 		$route = self::$route;
 		unset( $route['middleware'] );
 		self::$stack[self::$config['route_position']]['route'] = $route;
-
-		// sort the stack
-		ksort( self::$stack );
 
 	}
 

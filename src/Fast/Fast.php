@@ -120,13 +120,8 @@ class Fast {
 
 		// load $defaultSettings
 		require 'Config.php';
-		// build db settings
-		$appMongo = $appConfig['mongo'];
-		$configMongo = $config['mongo'];
-		$filteredMongo = array_merge( $configMongo, $appMongo );
 		// set the config
-		self::$config = array_merge($config, $appConfig);
-		self::$config['mongo'] = $filteredMongo;
+		self::$config = array_replace_recursive($config, $appConfig);
 
 		// set server information
 		if (self::$config['server_info']) {
@@ -135,7 +130,6 @@ class Fast {
 
 		// initialize the db
 		self::mongoInit();
-
 		// initialize the stack
 		self::stackInit();
 
