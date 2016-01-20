@@ -10,7 +10,7 @@
  * @package  	Fast
  *
  * MIT License
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -37,14 +37,14 @@ namespace Fast;
  * Fast
  *
  * Fast is an API Framework with a RESTful HTTP router.
- * 
+ *
  * @package Fast
  * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
  * @since  0.1.0
  */
 
 trait Middleware {
-	
+
 	/**
 	 * @var array Middleware
 	 */
@@ -58,7 +58,7 @@ trait Middleware {
 
 			$cb = self::$middleware[$middleware]['cb'];
 			$position = self::$middleware[$middleware]['position'];
-			
+
 			// set the position
 			if ($position == 'before') $position = -1;
 			if ($position == 'after') $position = 1;
@@ -70,10 +70,10 @@ trait Middleware {
 	/**
 	 *	Middleware
 	 */
-	static public function middleware($name, $cb, $position)
+	static public function middleware($name, $cb, $position = 0 )
 	{
 		self::$middleware[$name]['cb'] = $cb;
 		self::$middleware[$name]['position'] = $position;
 	}
-	
+
 }

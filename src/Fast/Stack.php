@@ -10,7 +10,7 @@
  * @package  	Fast
  *
  * MIT License
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -37,47 +37,60 @@ namespace Fast;
  * Fast
  *
  * Fast is an API Framework with a RESTful HTTP router.
- * 
+ *
  * @package Fast
  * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
  * @since  0.1.0
  */
 
 trait Stack {
-	
+
 	/**
 	 * @var array Stack
 	 */
 	static protected $stack;
 
-	/**
-	 *	Build the actions list 
-	 */
-	static private function buildActions($position, $cb, $args = array())
+	static private function stackInit()
 	{
-		// build the action
-		$action = array();
-		$action['position'] = $position;
-		$action['cb'] = $cb;
-		$action['args'] = $args;
-		// push the action onto actions
-		array_push(self::$stack, $action);
+		self::$stack = array();
 	}
 
 	/**
-	 *	Run the actions list 
+	 *	Run the actions list
 	 */
-	static private function runActions() {
-		// sort the actions by position
-		usort(self::$stack, function($a1, $a2) {
-			return $a1['position'] - $a2['position'];
-		});
+	static private function runStack() {
 		// run each action in the stack
-		foreach(self::$stack as $action) {
-			call_user_func_array($action['cb'], $action['args']);
+		foreach(self::$stack as $actions ) {
+			foreach( $actions as $action ) {
+				$cb = $action['cb'];
+				$args = isset( $action['params'] ) ? $action['params'] : array();
+				call_user_func_array($cb, $args);
+			}
 		}
-
 		self::response();
 	}
-	
+
+	/**
+	 *	Run the route
+	 */
+	static private function buildStack()
+	{
+		// add middleware to stack
+		foreach( self::$route['middleware'] as $key => $middleware ) {
+			if( isset( self::$middleware[$middleware] ) ) {
+				$middleware2 = self::$middleware[$middleware];
+				self::$stack[$middleware2['position']][$middleware]['cb'] = $middleware2['cb'];
+			}
+		}
+
+		// add route to stack
+		$route = self::$route;
+		unset( $route['middleware'] );
+		self::$stack[self::$config['route_position']]['route'] = $route;
+
+		// sort the stack
+		ksort( self::$stack );
+
+	}
+
 }

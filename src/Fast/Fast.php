@@ -10,7 +10,7 @@
  * @package  	Fast
  *
  * MIT License
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -37,7 +37,7 @@ namespace Fast;
  * Fast
  *
  * Fast is an API Framework with a RESTful HTTP router.
- * 
+ *
  * @package Fast
  * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
  * @since  0.1.0
@@ -55,7 +55,7 @@ require 'Task.php';
 class Fast {
 
 	/**
-	 * @const string The version of Fast 
+	 * @const string The version of Fast
 	 */
 	const VERSION = '0.1.0';
 
@@ -70,7 +70,7 @@ class Fast {
 	static protected $config;
 
 	/**
-	 *	Middleware trait 
+	 *	Middleware trait
 	 */
 	use Middleware;
 
@@ -80,12 +80,12 @@ class Fast {
 	use Database;
 
 	/**
-	 *	Response trait 
+	 *	Response trait
 	 */
 	use Response;
 
 	/**
-	 *	Router trait 
+	 *	Router trait
 	 */
 	use Router;
 
@@ -107,29 +107,38 @@ class Fast {
 	/**
 	 * Task trait
 	 */
-	use Task; 
+	use Task;
 
 	/**
 	 *	Initialize Fast
 	 */
 	static public function init($appConfig = array())
 	{
-		// var_dump(self::$config);
 		// Benchmarking
-		self::$benchmark = array(); 
+		self::$benchmark = array();
 		self::$benchmark['start'] = microtime(true);
-		// initialize the stack
-		self::$stack = array();
+
 		// load $defaultSettings
 		require 'Config.php';
-		// Configuration
+		// build db settings
+		$appMongo = $appConfig['mongo'];
+		$configMongo = $config['mongo'];
+		$filteredMongo = array_merge( $configMongo, $appMongo );
+		// set the config
 		self::$config = array_merge($config, $appConfig);
+		self::$config['mongo'] = $filteredMongo;
+
 		// set server information
 		if (self::$config['server_info']) {
 			self::setServerInfo();
 		}
+
 		// initialize the db
 		self::mongoInit();
+
+		// initialize the stack
+		self::stackInit();
+
 	}
 
 	/**
@@ -143,8 +152,10 @@ class Fast {
 	{
 		// Find a matching route or buzz out.
 		self::findRoute();
-		// execute the closure
-		self::runRoute();
+		// build the stack closures
+		self::buildStack();
+		// run the stack
+		self::runStack();
 	}
 
 } /* EOF Fast.php */

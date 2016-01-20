@@ -11,7 +11,7 @@
  * @package  	Fast
  *
  * MIT License
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -43,10 +43,13 @@ $config['server_path'] = dirname(dirname(__FILE__));
 $config['base_path'] = $_SERVER['REQUEST_URI'];
 $config['environment'] = 'development';
 
+// enable benchmark
+$config['benchmark'] = false;
+
+// default route position
+$config['route_position'] = 20;
+
 // database settings
 $config['mongo']['host'] = 'localhost';
 $config['mongo']['port'] = 27017;
 $config['mongo']['name'] = 'fast';
-
-// enable benchmark
-$config['benchmark'] = false;

@@ -10,7 +10,7 @@
  * @package  	Fast
  *
  * MIT License
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -37,14 +37,14 @@ namespace Fast;
  * Fast
  *
  * Fast is an API Framework with a RESTful HTTP router.
- * 
+ *
  * @package Fast
  * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
  * @since  0.1.0
  */
 
 trait Router {
-	
+
 	/**
 	 * @var array Routes
 	 */
@@ -63,7 +63,7 @@ trait Router {
 		$args = func_get_args();
 		self::mapRoute($args, "GET");
 	}
-	
+
 	/**
 	 * POST Request
 	 */
@@ -72,7 +72,7 @@ trait Router {
 		$args = func_get_args();
 		self::mapRoute($args, "POST");
 	}
-	
+
 	/**
 	 * PUT Request
 	 */
@@ -81,7 +81,7 @@ trait Router {
 		$args = func_get_args();
 		self::mapRoute($args, "PUT");
 	}
-	
+
 	/**
 	 * DELETE Request
 	 */
@@ -101,19 +101,6 @@ trait Router {
 	}
 
 	/**
-	 *	Run the route
-	 */
-	static private function runRoute()
-	{
-		// execute any before middleware
-		self::runMiddleware('before');
-		// execute the route
-		self::buildActions(0, self::$route['cb'], self::$route['params']);
-		// run actions
-		self::runActions();
-	}
-
-	/**
 	 * Map route
 	 */
 	static private function mapRoute($args = array(), $method = null)
@@ -127,7 +114,7 @@ trait Router {
 	    // add the route to the routes var
 	    self::$routes[$method][$pattern] = array(
 	    	"method" => $method,
-	    	"callback" => $callback, 
+	    	"callback" => $callback,
 	    	"middleware" => $middleware
 	    );
 	}
@@ -145,6 +132,7 @@ trait Router {
 		$url['original'] = $pattern;
 		$url['path'] = explode('/', parse_url($pattern, PHP_URL_PATH));
 		$url['length'] = count($url['path']);
+
 		// Parse the patterns
 		foreach (self::$routes[$method] as $pattern => $data) {
 			$parameters = array();
@@ -154,12 +142,12 @@ trait Router {
 				'path' => explode('/', $pattern)
 			);
 			$pattern['length'] = count($pattern['path']);
-			// this pattern is irrelevant 
+			// this pattern is irrelevant
 			if ($url['length'] <> $pattern['length']) {
 				continue;
 			}
 			// pattern matching
-			foreach($pattern['path'] as $i => $key) 
+			foreach($pattern['path'] as $i => $key)
 			{
 				if (strpos($key, ':') === 0)
 				{
@@ -171,16 +159,17 @@ trait Router {
 					continue 2;
 				}
 			}
-			// check for parameters key		
+			// check for parameters key
 			if ( ! array_key_exists('parameters', $data))
 			{
 				$data['parameters'] = array();
 			}
 			// add the parameters
 			$data['parameters'] = array_merge($data['parameters'], $parameters);
+
 			self::$route['middleware'] = $data['middleware'];
 			self::$route['cb'] = $data['callback'];
-			self::$route['params'] = $data['parameters']; 
+			self::$route['params'] = $data['parameters'];
 			// return the data
 			return true;
 		}

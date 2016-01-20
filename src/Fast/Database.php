@@ -10,7 +10,7 @@
  * @package  	Fast
  *
  * MIT License
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -37,7 +37,7 @@ namespace Fast;
  * Fast
  *
  * Fast is an API Framework with a RESTful HTTP router.
- * 
+ *
  * @package Fast
  * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
  * @since  0.1.0
@@ -51,7 +51,7 @@ trait Database {
 	static protected $mongo;
 
 	/**
-	 * Initialize MongoDb 
+	 * Initialize MongoDb
 	 */
 	static private function mongoInit()
 	{
@@ -69,5 +69,5 @@ trait Database {
 	{
 		return self::$mongo;
 	}
-	
+
 }
