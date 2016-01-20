@@ -130,3 +130,29 @@ You can add middleware before and after each response and request. The default p
 	Fast::get('cron', 'notify', function() {
 		// ex., code to notify someone that cron has run.
 	});
+
+## JSON Response
+
+Fast outputs JSON responses that include server info, speed benchmarks, and custom data that you return in your middleware and route closures. You must specify a key, ex. $data['entry'], and return $data in each closure to to see your custom content show up in the JSON response. Here's an example based on the above GET /entry/:id example.
+
+	{
+		server: {
+			name: "Fast API Server",
+			description: "Provides JSON data responses.",
+			version: "1.0"
+		},
+		auth: {
+			authenticated: true,
+			token: "98yq34pornasdifg7gasd"
+		},
+		entry: {
+			title: "Lorem Ipsum 1",
+			content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lorem ante, semper et lacus non, viverra iaculis velit. Fusce id lorem massa. Pellentesque placerat ligula eu faucibus suscipit. Proin mi erat, aliquet et mi in, maximus varius augue. Nullam elementum mauris justo, eget tempor purus tristique quis. Aenean vel turpis quis orci ultrices iaculis. Maecenas lacinia consequat massa blandit rutrum. Phasellus non libero tempor nunc gravida eleifend. Nam et nulla nunc. Curabitur eget nulla aliquet justo interdum pretium id ac tortor.",
+			author: "John Doe"
+		},
+		benchmark: {
+			start: 1453270614.2401,
+			end: 1453270614.2403,
+			execution_time: "0.00018 seconds"
+		}
+	}
