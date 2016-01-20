@@ -49,7 +49,7 @@ Customize the JSON response, database connection and more using Fast::init(). We
 
 	Fast::init( $config );
 
-## GET Examples
+## GET examples
 
 	Fast::get('/', function() {
 		// by default returns server information
@@ -76,14 +76,14 @@ Customize the JSON response, database connection and more using Fast::init(). We
 		return $data;
 	});
 
-## POST Examples
+## POST examples
 
 	Fast::post('entry', function() {
 		$data['success'] = 'Entry saved successfully.';
 		return $data;
 	});
 
-## PUT Examples
+## PUT examples
 
 	Fast::put('entry/:id', function($id) {
 		$data['success'] = 'Entry updated successfully.';
@@ -131,7 +131,7 @@ You can add middleware before and after each response and request. The default p
 		// ex., code to notify someone that cron has run.
 	});
 
-## JSON Response
+## JSON response
 
 Fast outputs JSON responses that include server info, speed benchmarks, and custom data that you return in your middleware and route closures. You must specify a key, ex. $data['entry'], and return $data in each closure to to see your custom content show up in the JSON response. Here's an example based on the above GET /entry/:id example.
 
