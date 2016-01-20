@@ -59,10 +59,10 @@ trait Stack {
 	 *	Run the actions list
 	 */
 	static private function runStack() {
-
+		// set the response status
+		self::setStatus();
 		// sort the stack
 		ksort( self::$stack );
-
 		// run each action in the stack
 		foreach(self::$stack as $key => $actions ) {
 			foreach( $actions as $action ) {

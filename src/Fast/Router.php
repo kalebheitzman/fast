@@ -3,8 +3,8 @@
  * Fast - A PHP5.4+ API Micro Framework
  *
  * @author 		Kaleb Heitzman <kalebheitzman@gmail.com>
- * @copyright 	2015 Kaleb Heitzman
- * @link 		https://github.com/kalebheitzman/fast
+ * @copyright 2015 Kaleb Heitzman
+ * @link 			https://github.com/kalebheitzman/fast
  * @license 	https://github.com/kalebheitzman/fast/blob/master/LICENSE
  * @version 	0.1.0
  * @package  	Fast
@@ -56,12 +56,35 @@ trait Router {
 	static protected $route;
 
 	/**
+	 * @var string Method
+	 */
+	static protected $method;
+
+	/**
+	 * OPTIONS Request
+	 */
+	static public function options()
+	{
+		$args = func_get_args();
+		self::mapRoute($args, "OPTIONS");
+	}
+
+	/**
 	 * GET Request
 	 */
 	static public function get()
 	{
 		$args = func_get_args();
 		self::mapRoute($args, "GET");
+	}
+
+	/**
+	 * HEAD Request
+	 */
+	static public function head()
+	{
+		$args = func_get_args();
+		self::mapRoute($args, "HEAD");
 	}
 
 	/**
@@ -92,15 +115,6 @@ trait Router {
 	}
 
 	/**
-	 * OPTIONS Request
-	 */
-	static public function options()
-	{
-		$args = func_get_args();
-		self::mapRoute($args, "OPTIONS");
-	}
-
-	/**
 	 * Map route
 	 */
 	static private function mapRoute($args = array(), $method = null)
@@ -108,15 +122,15 @@ trait Router {
 		// the pattern to test against
 		$pattern = array_shift($args);
 		// the callable
-	    $callback = array_pop($args);
-	    // the filterrs
-	    $middleware = $args;
-	    // add the route to the routes var
-	    self::$routes[$method][$pattern] = array(
-	    	"method" => $method,
-	    	"callback" => $callback,
-	    	"middleware" => $middleware
-	    );
+		$callback = array_pop($args);
+    // the filterrs
+    $middleware = $args;
+    // add the route to the routes var
+    self::$routes[$method][$pattern] = array(
+    	"method" => $method,
+    	"callback" => $callback,
+    	"middleware" => $middleware
+    );
 	}
 
 	/**
@@ -166,10 +180,12 @@ trait Router {
 			}
 			// add the parameters
 			$data['parameters'] = array_merge($data['parameters'], $parameters);
-
+			// setup the route
 			self::$route['middleware'] = $data['middleware'];
 			self::$route['cb'] = $data['callback'];
 			self::$route['params'] = $data['parameters'];
+			// set the method
+			self::$method = $method;
 			// return the data
 			return true;
 		}
