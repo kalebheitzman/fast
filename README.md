@@ -47,6 +47,9 @@ Customize the JSON response, database connection and more using Fast::init(). We
 	$config['mongo']['port'] = 27017;
 	$config['mongo']['name'] = 'fast';
 
+	// jwt key
+	$config['jwt_key'] = getenv('FAST_JWT_KEY');
+
 	Fast::init( $config );
 
 ## GET examples

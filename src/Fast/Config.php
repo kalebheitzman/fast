@@ -53,3 +53,6 @@ $config['route_position'] = 20;
 $config['mongo']['host'] = 'localhost';
 $config['mongo']['port'] = 27017;
 $config['mongo']['name'] = 'fast';
+
+// jwt key
+$config['jwt_key'] = null;
