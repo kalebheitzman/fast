@@ -58,11 +58,61 @@ trait Response {
 	static protected $httpCode;
 
 	/**
+	 * Set HTTP Status codes
+	 * @return string HTTP status codes
+	 */
+	static private function setStatus( $code = 200, $message = null ) {
+		// get the method
+		$method = self::$method;
+
+		// status codes
+		$status[200] = array(
+			'OPTION' => 'OK',
+			'GET' => 'OK',
+			'PUT' => 'OK resource updated',
+			'DELETE' => 'OK resource deleted'
+		);
+		$status[201] = 'Created';
+		$status[401] = 'Access denied';
+		$status[404] = 'Page not found';
+
+		// common error codes
+		$error_codes = array( 401, 404, 500 );
+
+		// send the http status code
+		self::$httpCode = $code;
+		// set the response status
+		if ( $code == 200 ) {
+			// get message
+			$message = ( ! is_null( $message ) ) ? $message : $status[$code][$method];
+			// set the http code
+			self::$response['status']['code'] = $code;
+			// set a helpful message
+			self::$response['status']['message'] = $message;
+		}
+		else {
+			// get defined message
+			$message = ( ! is_null( $message ) ) ? $message : $status[$code];
+			// set the http code
+			self::$response['status']['status'] = $code;
+			// set a helpful message
+			if ( in_array( $code, $error_codes ) ) {
+				self::$response['status']['error'] = $message;
+			} else {
+				self::$response['status']['message'] = $message;
+			}
+		}
+	}
+
+	/**
 	 *	Render a JSON response
 	 *	@return	void Initial Response Setup
 	 */
-	static public function response()
+	static public function response( $code = 200, $message = null )
 	{
+		// set the status code
+		self::setStatus( $code, $message );
+
 		// check for active benchmarking
 		if (self::$config['benchmark']) {
 			$execution = microtime(true)-self::$benchmark['start'];
@@ -76,54 +126,6 @@ trait Response {
 
 		// render a json response
 		self::sendResponse();
-	}
-
-	/**
-	 * 404 Page
-	 * @return void 404 JSON response
-	 */
-	static private function error404() {
-		// set the response status
-		self::$response['status'] = '404 not found';
-		self::$response['error'] = 'route not found';
-		// set the http status code
-		self::$httpCode = 404;
-		// render a json response
-		self::sendResponse();
-	}
-
-	/**
-	 * Set HTTP Status codes
-	 * @return string HTTP status codes
-	 */
-	static private function setStatus() {
-		// get the method
-		$method = self::$method;
-
-		// status codes
-
-		// OPTION
-		$status['OPTION']['status'] = 'OK';
-		$status['OPTION']['code'] = 200;
-		// GET
-		$status['GET']['status'] = 'OK';
-		$status['GET']['code'] = 200;
-		// POST
-		$status['POST']['status'] = 'Created';
-		$status['POST']['code'] = 201;
-		// PUT
-		$status['PUT']['status'] = 'OK resource updated';
-		$status['PUT']['code'] = 200;
-		// DELETE
-		$status['DELETE']['status'] = 'OK resource deleted';
-		$status['DELETE']['code'] = 200;
-
-		// get the response status
-		$response_status = $status[$method]['code'] . " " . $status[$method]['status'];
-
-		// send the response status
-		self::$httpCode = $status[$method]['code'];
-		self::$response['status'] = $response_status;
 	}
 
 	/**

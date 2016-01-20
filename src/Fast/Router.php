@@ -190,6 +190,6 @@ trait Router {
 			return true;
 		}
 		// no matches were found
-		return self::error404();
+		self::response( 404 );
 	}
 }

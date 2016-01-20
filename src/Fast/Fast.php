@@ -43,14 +43,17 @@ namespace Fast;
  * @since  0.1.0
  */
 
-require 'Getters.php';
-require 'Middleware.php';
-require 'Database.php';
-require 'Response.php';
-require 'Router.php';
-require 'Setters.php';
-require 'Stack.php';
-require 'Task.php';
+require_once 'Getters.php';
+require_once 'Middleware.php';
+require_once 'Database.php';
+require_once 'Response.php';
+require_once 'Router.php';
+require_once 'Setters.php';
+require_once 'Stack.php';
+require_once 'Sql.php';
+require_once 'Task.php';
+require_once 'Token.php';
+require_once 'JWT.php';
 
 class Fast {
 
@@ -105,9 +108,19 @@ class Fast {
 	use Setters;
 
 	/**
+	 * Sql trait
+	 */
+	use Sql;
+
+	/**
 	 * Task trait
 	 */
 	use Task;
+
+	/**
+	 * Token trait
+	 */
+	use Token;
 
 	/**
 	 *	Initialize Fast
@@ -122,6 +135,7 @@ class Fast {
 		require 'Config.php';
 		// set the config
 		self::$config = array_replace_recursive($config, $appConfig);
+		self::$config['server']['path'] = 'http' . ( isset($_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . "{$_SERVER['HTTP_HOST']}";
 
 		// set server information
 		if (self::$config['server_info']) {
@@ -132,7 +146,8 @@ class Fast {
 		self::mongoInit();
 		// initialize the stack
 		self::stackInit();
-
+		// initialize tokens
+		self::tokenInit();
 	}
 
 	/**
