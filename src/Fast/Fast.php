@@ -133,7 +133,6 @@ class Fast {
 		// initialize the stack
 		self::stackInit();
 
-		var_dump(self::$config);
 	}
 
 	/**
