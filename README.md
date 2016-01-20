@@ -1,6 +1,6 @@
 # PHP 5.4 API Micro Framework
 
-Fast is a PHP 5.4+ API Micro Framework for building APIs. Use the Fast::get(), Fast::post(), etc methods to build your api. Use your own databse libraries of choice and etc. We get you to the party and then it's your job to shine.
+Fast is a PHP 5.4+ API Micro Framework for building APIs. Use the Fast::get(), Fast::post(), etc methods to build your api. Fast is opinionated and is built to output JSON responses, authenticate via JSON Web Tokens (JWT), and it interacts with MongoDB to build Fast API's.
 
 ## Installation
 
@@ -22,6 +22,32 @@ Assuming that you're using index.php file to route requests, add this to the top
 This will use composers autoload feature and alias Fast as Fast for easier use.
 
 Fast builds a stack based on middleware and routes that you specify. Middleware can be placed at different positions in the stack. By default all middleware is placed at 0. When a route is found, it is placed at position 20 in the stack. To run middleware before your route code runs, specify a position less than 20. To make middleware run after your route, specify a position greater than 20. You can change your default route position using an $appConfig.
+
+## Configuration
+
+Customize the JSON response, database connection and more using Fast::init(). We've included an example below of every configuration variable.
+
+	// Server information
+	$config['server']['name'] = 'Fast API Server';
+	$config['server']['description'] = 'Provides JSON data responses.';
+	$config['server']['version'] = '1.0';
+	$config['server_info'] = true;
+
+	// Setup the environment
+	$config['environment'] = 'development';
+
+	// enable benchmark
+	$config['benchmark'] = false;
+
+	// default route position
+	$config['route_position'] = 20;
+
+	// database settings
+	$config['mongo']['host'] = 'localhost';
+	$config['mongo']['port'] = 27017;
+	$config['mongo']['name'] = 'fast';
+
+	Fast::init( $config );
 
 ## GET Examples
 
