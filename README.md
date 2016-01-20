@@ -28,10 +28,10 @@ Fast builds a stack based on middleware and routes that you specify. Middleware 
 Customize the JSON response, database connection and more using Fast::init(). We've included an example below of every configuration variable.
 
 	// Server information
-	$config['server']['name'] = 				'Fast API Server';
-	$config['server']['description'] = 	'Provides JSON data responses.';
-	$config['server']['version'] = 			'1.0';
-	$config['server_info'] = 						true;
+	$config['server']['name'] = 'Fast API Server';
+	$config['server']['description'] = 'Provides JSON data responses.';
+	$config['server']['version'] = '1.0';
+	$config['server_info'] = true;
 
 	// Setup the environment
 	$config['environment'] = 'development';
