@@ -147,7 +147,14 @@ Fast outputs JSON responses that include server info, speed benchmarks, and cust
 		},
 		entry: {
 			title: "Lorem Ipsum 1",
-			content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lorem ante, semper et lacus non, viverra iaculis velit. Fusce id lorem massa. Pellentesque placerat ligula eu faucibus suscipit. Proin mi erat, aliquet et mi in, maximus varius augue. Nullam elementum mauris justo, eget tempor purus tristique quis. Aenean vel turpis quis orci ultrices iaculis. Maecenas lacinia consequat massa blandit rutrum. Phasellus non libero tempor nunc gravida eleifend. Nam et nulla nunc. Curabitur eget nulla aliquet justo interdum pretium id ac tortor.",
+			content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+			lorem ante, semper et lacus non, viverra iaculis velit. Fusce id lorem
+			massa. Pellentesque placerat ligula eu faucibus suscipit. Proin mi erat,
+			aliquet et mi in, maximus varius augue. Nullam elementum mauris justo,
+			eget tempor purus tristique quis. Aenean vel turpis quis orci ultrices
+			iaculis. Maecenas lacinia consequat massa blandit rutrum. Phasellus non
+			libero tempor nunc gravida eleifend. Nam et nulla nunc. Curabitur eget
+			nulla aliquet justo interdum pretium id ac tortor.",
 			author: "John Doe"
 		},
 		benchmark: {
