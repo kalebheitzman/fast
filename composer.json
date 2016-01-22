@@ -1,5 +1,5 @@
 {
-	"name": "kheitzman/fast",
+	"name": "kh/fast",
 	"type": "library",
 	"description": "PHP API Micro Framework",
 	"keywords": ["router", "framework", "fast", "api"],
