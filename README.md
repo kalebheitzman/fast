@@ -1,6 +1,6 @@
-# PHP, JSON, and Mongo API Microframework
+# Fast API Microframework
 
-Fast is a PHP 5.4+ API Microframework for building APIs. Use the Fast::get(), Fast::post(), etc methods to build your api. Fast is opinionated and is built to output JSON responses, authenticate via JSON Web Tokens (JWT), and it interacts with MongoDB to build Fast API's.
+Fast is a PHP 5.4+ API microframework for building APIs. Use the Fast::get(), Fast::post(), etc methods to build your api. Fast is opinionated and is built to output JSON responses, authenticate via JSON Web Tokens (JWT), and it interacts with MongoDB to build Fast API's.
 
 ## Installation
 
