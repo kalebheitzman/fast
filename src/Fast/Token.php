@@ -33,6 +33,12 @@
 
 namespace Fast;
 
+// use Firebase JWT for JSON Web Token Interaction
+use \Firebase\JWT\JWT as JWT;
+
+/**
+ * Token Trait
+ */
 trait Token {
 
   /**
@@ -73,7 +79,7 @@ trait Token {
       "sub" => $user_id // subject
     );
     // encode the token
-    $jwt = \JWT::encode( $token, self::$key );
+    $jwt = JWT::encode( $token, self::$key );
     // return the data
     $data['token'] = $jwt;
     return $data;
@@ -93,7 +99,7 @@ trait Token {
     }
     try {
       // get the decoded token
-      $decoded = \JWT::decode( $token , self::$key );
+      $decoded = JWT::decode( $token , self::$key );
       return $decoded;
     }
     catch ( \Exception $e ) {
