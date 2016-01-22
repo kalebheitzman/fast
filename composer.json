@@ -1,7 +1,7 @@
 {
-	"name": "kh/fast",
+	"name": "firepress/fast",
 	"type": "library",
-	"description": "PHP API Micro Framework",
+	"description": "PHP, JSON, and Mongo API Framework",
 	"keywords": ["router", "framework", "fast", "api"],
 	"homepage": "https://github.com/kalebheitzman/fast",
 	"license": "MIT",
