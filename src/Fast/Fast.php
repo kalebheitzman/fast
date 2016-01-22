@@ -43,17 +43,12 @@ namespace Fast;
  * @since  0.1.0
  */
 
-require_once 'Getters.php';
-require_once 'Middleware.php';
-require_once 'Database.php';
-require_once 'Response.php';
-require_once 'Router.php';
-require_once 'Setters.php';
-require_once 'Stack.php';
-require_once 'Sql.php';
-require_once 'Task.php';
-require_once 'Token.php';
-require_once 'JWT.php';
+ /**
+  * Autoloader
+  *
+  * Autmagically loads classes from the echo/includes. Instantiates them in the
+  * plugin file using the i.e. $prayers = new PrayerPrayers; format.
+  */
 
 class Fast {
 
@@ -121,6 +116,12 @@ class Fast {
 	 * Token trait
 	 */
 	use Token;
+
+  function __autoload( $class )
+  {
+    $parts = explode('\\', $class);
+    require end($parts) . '.php';
+  }
 
 	/**
 	 *	Initialize Fast

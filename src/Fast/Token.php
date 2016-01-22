@@ -97,7 +97,7 @@ trait Token {
       return $decoded;
     }
     catch ( \Exception $e ) {
-      self::response( 401, 'token: ' . $e->getMessage() );
+      self::response( 401, 'Token ' . $e->getMessage() );
     }
   }
 
