@@ -99,11 +99,11 @@ trait Token {
     }
     try {
       // get the decoded token
-      $decoded = JWT::decode( $token , self::$key );
+      $decoded = JWT::decode( $token , self::$key, array('HS256') );
       return $decoded;
     }
     catch ( \Exception $e ) {
-      self::response( 401, 'Token ' . $e->getMessage() );
+      self::response( 401, $e->getMessage() );
     }
   }
 

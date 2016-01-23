@@ -123,6 +123,25 @@ trait Router {
 	}
 
 	/**
+	 * RESOURCE request
+	 * TODO: build a resource request that generates paths for GET, POST, PUT, DELETE
+	 */
+	static public function resource()
+	{
+		$args = func_get_args();
+
+		// get all
+
+		// get one by id
+
+		// create one
+
+		// update one by id
+
+		// delete one by id
+	}
+
+	/**
 	 * Map route
 	 */
 	static private function mapRoute($args = array(), $method = null)
