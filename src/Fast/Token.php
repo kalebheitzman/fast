@@ -72,9 +72,9 @@ trait Token {
     $time = time();
     // create the token to encode
     $token = array(
-      "iat" => $time, // issued at
       // "jti" => null,
       "iss" => self::$config['server']['path'], // issuer
+      "iat" => $time, // issued at
       "exp" => $time + self::$config['jwt']['time_valid'], // expires
       "sub" => $user_id // subject
     );
@@ -91,17 +91,30 @@ trait Token {
    */
   static public function decodeToken()
   {
-    // eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJGYXN0IEFQSSBTZXJ2ZXIiLCJpYXQiOjE0NTMyODIxMDJ9.zVkjnss29YLfpALFBCC93tqDqwvzFQ2kgnh7UhRkWS4
-    $token = isset( $_GET['token'] ) ? $_GET['token'] : null;
-    if ( $token == null ) {
+    if ( isset( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
+      $authorization = $_SERVER['HTTP_AUTHORIZATION'];
+
+      if ( strpos ( $authorization, 'Bearer' ) !== false ) {
+          $auth_parts = explode( 'Bearer ', $authorization );
+          $token = trim( $auth_parts[1] );
+      } else {
+        self::response( 401, 'You must provide a valid token.' );
+      }
+
+    } elseif ( isset( $_GET['token'] ) ) {
+      // request based token
+      $token = $_GET['token'];
+    } else {
       // access denied
-  		self::response( 401, 'You must provide a token.' );
+  		self::response( 401, 'You must provide a valid token.' );
     }
+
+    // get the decoded token
     try {
-      // get the decoded token
       $decoded = JWT::decode( $token , self::$key, array('HS256') );
       return $decoded;
     }
+    // catch the exception
     catch ( \Exception $e ) {
       self::response( 401, $e->getMessage() );
     }
