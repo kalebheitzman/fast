@@ -54,10 +54,10 @@ trait Middleware {
 	{
 		if (is_null($position)) return false;
 
-		foreach(self::$route['middleware'] as $middleware) {
+		foreach(self::$engine->route['middleware'] as $middleware) {
 
-			$cb = self::$middleware[$middleware]['cb'];
-			$position = self::$middleware[$middleware]['position'];
+			$cb = self::$engine->middleware[$middleware]['cb'];
+			$position = self::$engine->middleware[$middleware]['position'];
 
 			// set the position
 			if ($position == 'before') $position = -1;
@@ -72,8 +72,8 @@ trait Middleware {
 	 */
 	static public function middleware($name, $cb, $position = 0 )
 	{
-		self::$middleware[$name]['cb'] = $cb;
-		self::$middleware[$name]['position'] = $position;
+		self::$engine->middleware[$name]['cb'] = $cb;
+		self::$engine->middleware[$name]['position'] = $position;
 	}
 
 }

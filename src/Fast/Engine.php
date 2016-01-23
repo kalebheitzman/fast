@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Fast - A PHP5.4+ API Micro Framework
  *
@@ -32,28 +31,52 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// Server information
-$config['server']['name'] = 'Fast API Server';
-$config['server']['description'] = 'Provides JSON responses to API endpoints via MongoDB.';
-$config['server']['version'] = '1.0';
-$config['server_info'] = true;
+namespace Fast;
 
-// Setup the environment
-$config['server_path'] = dirname(dirname(__FILE__));
-$config['base_path'] = $_SERVER['REQUEST_URI'];
-$config['environment'] = 'development';
+/**
+ * Fast
+ *
+ * Fast is an API Framework with a RESTful HTTP router.
+ *
+ * @package Fast
+ * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
+ * @since  0.1.0
+ */
 
-// enable benchmark
-$config['benchmark'] = false;
+trait Engine {
 
-// default route position
-$config['route_position'] = 20;
+  /**
+	 * @var Object Engine
+	 */
+	static protected $engine;
 
-// database settings
-$config['mongo']['host'] = 'localhost';
-$config['mongo']['port'] = 27017;
-$config['mongo']['name'] = 'fast';
+  /**
+   * Initialize the App Engine
+   * @return void
+   */
+  static public function initEngine()
+  {
+    // set the engine to an empty object. we store request, repsonse, and etc
+    self::$engine = new \stdClass;
 
-// jwt key
-$config['jwt']['key'] = null;
-$config['jwt']['time_valid'] = 60; // 60*60*24*30; // 30 days
+		// Benchmarking
+		self::$engine->benchmark = array();
+		self::$engine->benchmark['start'] = microtime(true);
+
+		// engine parts
+		$engine_parts = array(
+			'request',
+			'middleware',
+			'stack',
+			'tasks'
+		);
+
+		// build the engine
+		foreach ( $engine_parts as $part )
+		{
+			self::$engine->$part = array();
+		}
+
+  }
+
+}

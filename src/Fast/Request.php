@@ -47,4 +47,20 @@ namespace Fast;
 
 trait Request {
 
+  static public function requestInit()
+  {
+    // Get the route called
+		$pattern = isset($_SERVER['PATH_INFO']) ? ltrim($_SERVER['PATH_INFO'], "/") : "/";
+		// Get the method
+		$method = $_SERVER['REQUEST_METHOD'];
+		// Setup the URL
+		$url['original'] = $pattern;
+		$url['path'] = explode('/', parse_url($pattern, PHP_URL_PATH));
+		$url['length'] = count($url['path']);
+    // set the requests
+    self::$engine->request['method'] = $method;
+    self::$engine->request['pattern'] = $pattern;
+    self::$engine->request['url'] = $url;
+  }
+
 }

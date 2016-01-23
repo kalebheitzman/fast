@@ -48,14 +48,23 @@ namespace Fast;
 trait Response {
 
 	/**
-	 * @var array Routes
+	 * @var integer HTTP Code
+	 */
+	static protected $httpCode;
+
+	/**
+	 * @var array Response
 	 */
 	static protected $response;
 
 	/**
-	 * @var integer HTTP Code
+	 * Initialize the Response
+	 * @return void
 	 */
-	static protected $httpCode;
+	static public function responseInit()
+	{
+		self::$engine->response = array();
+	}
 
 	/**
 	 * Set HTTP Status codes
@@ -63,58 +72,37 @@ trait Response {
 	 */
 	static private function setStatus( $code = 200, $message = null ) {
 		// get the method
-		$method = self::$method;
+		$method = self::$engine->request['method'];
 
 		// status codes
-		$status[200] = array(
-			'OPTION' => 'OK',
-			'GET' => 'OK',
-			'PUT' => 'OK resource updated',
-			'DELETE' => 'OK resource deleted'
-		);
-		$status[201] = 'Created';
-		$status[202] = 'Accepted';
-		$status[203] = 'Non-Authoritative Information';
-		$status[204] = 'No Content';
-		$status[301] = 'Moved Permanently';
-		$status[400] = 'Bad Request';
-		$status[401] = 'Access Denied';
-		$status[402] = 'Payment Required';
-		$status[403] = 'Forbidden';
-		$status[404] = 'Not Found';
-		$status[405] = 'Method Not Allowed';
-		$status[419] = 'Authentication Timeout';
-		$status[429] = 'Too Many Requests';
-		$status[500] = 'Internal Sever Error';
-		$status[501] = 'Not Implemented';
-		$status[503] = 'Service Unavailable';
+		$status[200] = 'OK';											// everything is working
+		$status[201] = 'Created';									// new resource has been created
+		$status[204] = 'No Content';							// the resource was successfully deleted
+		$status[304] = 'Not Modified';						// the client can use cached data
+		$status[400] = 'Bad Request';							// request invalid, exact error should be explained
+		$status[401] = 'Unauthorized';						// requires user authentication
+		$status[403] = 'Forbidden';								// understood request, server refuses access
+		$status[404] = 'Not Found';								// no resource behind the URI
+		$status[422] = 'Unprocessable Entity';		// image cannot be formatted, mandatory fields missing
+		$status[500] = 'Internal Sever Error';		// api developers should avoid this error. Stacktrace should be logged and not returned as response
+		$status[503] = 'Service Unavailable';			// server is unable to handle the request
 
 		// common error codes
-		$error_codes = array( 401, 404, 500 );
+		$error_codes = array( 401, 404, 500, 503 );
 
 		// send the http status code
-		self::$httpCode = $code;
-		// set the response status
-		if ( $code == 200 ) {
-			// get message
-			$message = ( ! is_null( $message ) ) ? $message : $status[$code][$method];
-			// set the http code
-			self::$response['status']['code'] = $code;
-			// set a helpful message
-			self::$response['status']['message'] = $message;
+		self::$engine->request['httpCode'] = $code;
+		// get defined message
+		$message = ( ! is_null( $message ) ) ? $message : $status[$code];
+		// set the http code
+		self::$engine->response['status']['code'] = $code;
+		// set a helpful message
+		if ( in_array( $code, $error_codes ) ) {
+			self::$engine->response['status']['error'] = $message;
+		} else {
+			self::$engine->response['status']['message'] = $message;
 		}
-		else {
-			// get defined message
-			$message = ( ! is_null( $message ) ) ? $message : $status[$code];
-			// set the http code
-			self::$response['status']['code'] = $code;
-			// set a helpful message
-			if ( in_array( $code, $error_codes ) ) {
-				self::$response['status']['error'] = $message;
-			} else {
-				self::$response['status']['message'] = $message;
-			}
-		}
+
 	}
 
 	/**
@@ -128,13 +116,14 @@ trait Response {
 
 		// check for active benchmarking
 		if (self::$config['benchmark']) {
-			$execution = microtime(true)-self::$benchmark['start'];
+			$execution = microtime(true)-self::$engine->benchmark['start'];
 			$execution = substr($execution, 0, 7);
-			$benchmark['start'] = self::$benchmark['start'];
+			$benchmark['start'] = self::$engine->benchmark['start'];
 			$benchmark['end'] = microtime(true);
 			$benchmark['execution_time'] = $execution.' seconds';
 
-			self::$response['benchmark'] = $benchmark;
+			self::$engine->response['benchmark'] = $benchmark;
+			self::$engine->benchmark = $benchmark;
 		}
 
 		// render a json response
@@ -148,11 +137,11 @@ trait Response {
 	static private function sendResponse()
 	{
 		// get the http response code
-		http_response_code( self::$httpCode );
+		http_response_code( self::$engine->request['httpCode'] );
 		// set the content tyupe
 		header('Content-Type: application/json');
 		// send the response
-		echo json_encode( self::$response );
+		echo json_encode( self::$engine->response );
 		exit();
 	}
 

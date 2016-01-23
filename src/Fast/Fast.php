@@ -58,19 +58,9 @@ class Fast {
 	const VERSION = '0.1.0';
 
 	/**
-	 * @var array Benchmarking
+	 * Engine trait
 	 */
-	static protected $benchmark;
-
-	/**
-	 * @var Array Configuration
-	 */
-	static protected $config;
-
-	/**
-	 *	Middleware trait
-	 */
-	use Middleware;
+	use Engine;
 
 	/**
 	 * Database trait
@@ -78,14 +68,24 @@ class Fast {
 	use Database;
 
 	/**
+	 *	Router trait
+	 */
+	use Router;
+
+	/**
+	 * Request trait
+	 */
+	use Request;
+
+	/**
 	 *	Response trait
 	 */
 	use Response;
 
 	/**
-	 *	Router trait
+	 *	Middleware trait
 	 */
-	use Router;
+	use Middleware;
 
 	/**
 	 * Stack trait
@@ -117,6 +117,17 @@ class Fast {
 	 */
 	use Token;
 
+	/**
+	 * Configuration
+	 * @var array
+	 */
+	static protected $config;
+
+	/**
+	 * Autoloader
+	 * @param  string $class Class Name
+	 * @return void
+	 */
   function __autoload( $class )
   {
     $parts = explode('\\', $class);
@@ -126,12 +137,35 @@ class Fast {
 	/**
 	 *	Initialize Fast
 	 */
-	static public function init($appConfig = array())
+	static public function init( $appConfig = array() )
 	{
-		// Benchmarking
-		self::$benchmark = array();
-		self::$benchmark['start'] = microtime(true);
+		// initialize the app engine
+		self::initEngine();
 
+		// set the config
+		self::initConfig( $appConfig );
+
+		// initialize the db
+		self::dbInit();
+		// initialize tokens
+		self::tokenInit();
+
+		// initialize the router
+		self::routerInit();
+
+		// initialize the request
+		self::requestInit();
+		// initialize the stack
+		self::stackInit();
+	}
+
+	/**
+	 * Initialize Configuration
+	 * @param  array $appConfig Configuration
+	 * @return void
+	 */
+	static private function initConfig( $appConfig )
+	{
 		// load $defaultSettings
 		require 'Config.php';
 		// set the config
@@ -142,13 +176,6 @@ class Fast {
 		if (self::$config['server_info']) {
 			self::setServerInfo();
 		}
-
-		// initialize the db
-		self::mongoInit();
-		// initialize the stack
-		self::stackInit();
-		// initialize tokens
-		self::tokenInit();
 	}
 
 	/**

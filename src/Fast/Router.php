@@ -61,12 +61,20 @@ trait Router {
 	static protected $method;
 
 	/**
+	 * Initialize the Router
+	 */
+	static private function routerInit()
+	{
+
+	}
+
+	/**
 	 * OPTIONS Request
 	 */
 	static public function options()
 	{
 		$args = func_get_args();
-		self::mapRoute($args, "OPTIONS");
+		self::$engine->router['mapRoute']($args, "OPTIONS");
 	}
 
 	/**
@@ -84,7 +92,7 @@ trait Router {
 	static public function head()
 	{
 		$args = func_get_args();
-		self::mapRoute($args, "HEAD");
+		self::$engine->router['mapRoute']($args, "HEAD");
 	}
 
 	/**
@@ -93,7 +101,7 @@ trait Router {
 	static public function post()
 	{
 		$args = func_get_args();
-		self::mapRoute($args, "POST");
+		self::$engine->router['mapRoute']($args, "POST");
 	}
 
 	/**
@@ -102,7 +110,7 @@ trait Router {
 	static public function put()
 	{
 		$args = func_get_args();
-		self::mapRoute($args, "PUT");
+		self::$engine->router['mapRoute']($args, "PUT");
 	}
 
 	/**
@@ -111,7 +119,7 @@ trait Router {
 	static public function delete()
 	{
 		$args = func_get_args();
-		self::mapRoute($args, "DELETE");
+		self::$engine->router['mapRoute']($args, "DELETE");
 	}
 
 	/**
@@ -181,9 +189,9 @@ trait Router {
 			// add the parameters
 			$data['parameters'] = array_merge($data['parameters'], $parameters);
 			// setup the route
-			self::$route['middleware'] = $data['middleware'];
-			self::$route['cb'] = $data['callback'];
-			self::$route['params'] = $data['parameters'];
+			self::$engine->route['middleware'] = $data['middleware'];
+			self::$engine->route['cb'] = $data['callback'];
+			self::$engine->route['params'] = $data['parameters'];
 			// set the method
 			self::$method = $method;
 			// return the data

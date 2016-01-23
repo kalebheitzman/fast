@@ -10,7 +10,7 @@
  * @package  	Fast
  *
  * MIT License
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -37,7 +37,7 @@ namespace Fast;
  * Fast
  *
  * Fast is an API Framework with a RESTful HTTP router.
- * 
+ *
  * @package Fast
  * @author  Kaleb Heitzman <kalebheitzman@gmail.com>
  * @since  0.1.0
@@ -51,16 +51,16 @@ trait Setters {
 		$information['server']['description'] = self::$config['server']['description'];
 		$information['server']['version'] = self::$config['server']['version'] ;
 
-		self::setData($information);
+		self::setResponseData($information);
 	}
 
 	/**
-	 *	Set the data 
+	 *	Set the data
 	 */
-	static public function setData($data = null)
+	static public function setResponseData( $data = null )
 	{
 		foreach ($data as $key => $value) {
-			self::$response[$key] = $value;
+			self::$engine->response[$key] = $value;
 		}
 	}
 

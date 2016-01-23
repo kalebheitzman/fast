@@ -52,7 +52,7 @@ trait Stack {
 
 	static private function stackInit()
 	{
-		self::$stack = array();
+		self::$engine->stack = array();
 	}
 
 	/**
@@ -60,12 +60,12 @@ trait Stack {
 	 */
 	static private function runStack() {
 		// sort the stack
-		ksort( self::$stack );
+		ksort( self::$engine->stack );
 		// run each action in the stack
-		foreach(self::$stack as $key => $actions ) {
+		foreach(self::$engine->stack as $key => $actions ) {
 			foreach( $actions as $action ) {
 
-				$response_key = key(self::$stack[$key]);
+				$response_key = key(self::$engine->stack[$key]);
 				if ( $response_key == 'route' ) $response_key = 'data';
 
 				$cb = $action['cb'];
@@ -75,7 +75,7 @@ trait Stack {
 				// add the data to the response
 				if ( ! is_null( $results ) && is_array( $results) ) {
 					foreach ( $results as $key => $result ) {
-						self::$response[$key] = $result;
+						self::$engine->response[$key] = $result;
 					}
 				}
 
@@ -91,17 +91,17 @@ trait Stack {
 	static private function buildStack()
 	{
 		// add middleware to stack
-		foreach( self::$route['middleware'] as $key => $middleware ) {
-			if( isset( self::$middleware[$middleware] ) ) {
-				$middleware2 = self::$middleware[$middleware];
-				self::$stack[$middleware2['position']][$middleware]['cb'] = $middleware2['cb'];
+		foreach( self::$engine->route['middleware'] as $key => $middleware ) {
+			if( isset( self::$engine->middleware[$middleware] ) ) {
+				$middleware2 = self::$engine->middleware[$middleware];
+				self::$engine->stack[$middleware2['position']][$middleware]['cb'] = $middleware2['cb'];
 			}
 		}
 
 		// add route to stack
-		$route = self::$route;
+		$route = self::$engine->route;
 		unset( $route['middleware'] );
-		self::$stack[self::$config['route_position']]['route'] = $route;
+		self::$engine->stack[self::$config['route_position']]['route'] = $route;
 
 	}
 
