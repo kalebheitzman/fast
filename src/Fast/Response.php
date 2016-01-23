@@ -91,7 +91,7 @@ trait Response {
 		$error_codes = array( 401, 404, 500, 503 );
 
 		// send the http status code
-		self::$engine->request['httpCode'] = $code;
+		self::$httpCode = $code;
 		// get defined message
 		$message = ( ! is_null( $message ) ) ? $message : $status[$code];
 		// set the http code
@@ -137,7 +137,7 @@ trait Response {
 	static private function sendResponse()
 	{
 		// get the http response code
-		http_response_code( self::$engine->request['httpCode'] );
+		http_response_code( self::$httpCode );
 		// set the content tyupe
 		header('Content-Type: application/json');
 		// send the response

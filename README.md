@@ -29,9 +29,8 @@ Customize the JSON response, database connection and more using Fast::init(). We
 
 	// Server information
 	$config['server']['name'] = 'Fast API Server';
-	$config['server']['description'] = 'Provides JSON data responses.';
+	$config['server']['description'] = 'Provides JSON responses to API endpoints via MongoDB.';
 	$config['server']['version'] = '1.0';
-	$config['server_info'] = true;
 
 	// Setup the environment
 	$config['environment'] = 'development';
@@ -48,7 +47,11 @@ Customize the JSON response, database connection and more using Fast::init(). We
 	$config['mongo']['name'] = 'fast';
 
 	// jwt key
-	$config['jwt_key'] = getenv('FAST_JWT_KEY');
+	$config['jwt']['key'] = null;
+	$config['jwt']['time_valid'] = 60; // 60*60*24*30; // 30 days
+
+	// logging
+	$config['logging'] = false;
 
 	Fast::init( $config );
 
